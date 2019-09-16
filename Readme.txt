@@ -1,4 +1,4 @@
 ﻿수정
 다시 수정했습니다.
 팀장이 다시 수정했습니다
-!!Opens source project 2019!!
+!!dali ban picasoo!!
