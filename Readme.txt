@@ -1,4 +1,6 @@
 ﻿수정
 다시 수정했습니다.
 팀장이 다시 수정했습니다
-!!dali ban picasoo!!
+Feature/Login에서 팀원1이 수정하였습니다.
+왕밤빵왕밤빵
+!!dali ban picaso!!
