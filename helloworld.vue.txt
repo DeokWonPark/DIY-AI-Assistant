@@ -1,0 +1,77 @@
+<template>
+  <div class="container">    
+    <div class="col-lg-6 offset-lg-3 ">        
+      <div class="card bg-info">
+        <div class="card-header text-white">
+          <h4>
+            My Chat App            
+          </h4>
+        </div>
+        <ul class="list-group list-group-flush "> <!-- Message loop -->   
+          <li class="list-group-item" v-for="message in messages" :key="message.id">
+            <span class="float-right">
+              {{message}}
+            </span>
+          </li>
+        </ul>
+
+        <div class="card-body"> 
+          <form @submit.prevent="send"> <!-- Prevent default event for submit, execute send method instead-->
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"                
+                placeholder="Enter message here"
+                v-model="newMessage"
+              /> <!-- binding with newMessage variable -->
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import io from 'socket.io-client';
+
+export default {
+  name: "HelloWorld",
+  data: function() {  // data
+    return {      
+      messages: [],
+      newMessage: null,       
+      socket: io("localhost:3000") // socket connection to server
+    };
+  },
+
+  created() {  // created callback of vue instance
+    this.socket.on("chat-message", data => { // when "chat-message" comes from the server
+      console.log('msg received from server');
+      this.messages.push(
+        data.message        
+      );      
+    });          
+    
+  },  
+  
+  methods: {    
+    send() {      // implementation of send method for vue instance
+      this.socket.emit("chat-message", {
+        message: this.newMessage        // emitting "chat-message" to the server
+      });      
+    },    
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+h2, h4 {
+  text-align:left;
+}
+ul {
+  max-height:50vh;
+  overflow-y:auto;
+}
+</style>
