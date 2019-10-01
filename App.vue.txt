@@ -1,0 +1,63 @@
+<template>
+  <div>
+      <div>
+    <steps :active="active" finish-status="success">
+      <step title="Step 1"></step>
+      <step title="Step 2"></step>
+
+    </steps>
+    <component :is="whichStep"></component>
+    <button id=chat style="margin-top: 12px; margin-left: 700px;" @click="previous">{{button.text}}</button>
+      </div>  
+  </div>
+</template>
+
+<script>
+
+export default {
+  name: 'app',
+  components: {
+    'Nickname': () => import('./components/Nickname.vue'),
+    'Helloworld': () => import('./components/HelloWorld.vue')
+  },
+  data() {
+    return {
+      active:0,
+      button: {
+      text: 'go to chatting'
+    }
+      
+    }
+  },
+  methods: {
+    previous() {
+      if(this.active-- === 0) this.active = 1, this.button.text = 'change Nickname'
+      else this.active = 0, this.button.text = 'go to chatting'
+    },
+    
+  },
+  computed: {
+    whichStep () {
+      switch (this.active) {
+      case 0:
+          return 'Nickname'
+      case 1:
+          return 'Helloworld'
+      default:
+        return 'Nickname'
+      }
+    }
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
