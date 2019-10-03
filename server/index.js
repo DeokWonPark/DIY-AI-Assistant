@@ -10,7 +10,8 @@ app.use(express.static('dist'));
 
 io.on('connection', (socket) => {
     console.log(socket.client.id); // Prints client socket id
-    
+    io.emit('joinroom', {nickname : socket.client.id});
+
     socket.on('chat-message', (data) => {
         io.emit('chat-message', (data));
         console.log(data);

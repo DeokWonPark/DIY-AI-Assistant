@@ -3,7 +3,8 @@
     <div class="col-lg-6 offset-lg-3">
       <div class="card bg-info">
         <Header />
-        <ChatList :messages="messages"/>
+        <ChatList :messages="messages" />
+        <ChatList :users="users" />
         <Input @send="send($event)"/>
       </div>
     </div>
@@ -26,13 +27,23 @@ export default {
     // data
     return {
       messages: [],
+      users: [],
       newMessage: null,
+      usercount:-1,
       //socket: this.$io("localhost:3000") // socket connection to server
     };
   },
 
   created() {
     // created callback of vue instance
+    this.$socket.on("joinroom",data => {
+     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
+     this.users.push(name);
+     this.usercount++;
+     alert(this.users[this.usercount]+" 님이 입장하였습니다.");
+     this.messages.push(this.users[this.usercount]+" 님이 입장하였습니다.");
+    });
+
     this.$socket.on("chat-message", data => {
       // when "chat-message" comes from the server
       console.log("msg received from server");
@@ -41,6 +52,7 @@ export default {
   },
 
   methods: {
+
     send(data) {
       // implementation of send method for vue instance
       this.$socket.emit("chat-message", {
