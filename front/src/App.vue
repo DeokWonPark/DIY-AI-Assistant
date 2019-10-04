@@ -27,21 +27,18 @@ export default {
     // data
     return {
       messages: [],
-      users: [],
       newMessage: null,
-      usercount:-1,
       //socket: this.$io("localhost:3000") // socket connection to server
     };
   },
 
   created() {
     // created callback of vue instance
-    this.$socket.on("joinroom",data => {
-     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
-     this.users.push(name);
-     this.usercount++;
-     alert(this.users[this.usercount]+" 님이 입장하였습니다.");
-     this.messages.push(this.users[this.usercount]+" 님이 입장하였습니다.");
+    var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
+    this.$socket.emit("userdata",name);
+    this.$socket.on("joinroom",(culname) => {
+    alert(culname+" 님이 입장하였습니다.");
+    this.messages.push(culname+" 님이 입장하였습니다.");
     });
 
     this.$socket.on("chat-message", data => {
