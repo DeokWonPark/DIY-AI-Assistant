@@ -1,5 +1,6 @@
 CREATE TABLE `users` (
+`id` int(30) NOT NULL AUTO_INCREMENT,
 `client_id` varchar(100) NOT NULL,
   `name` varchar(30) NOT NULL,
-  PRIMARY KEY (client_id)
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

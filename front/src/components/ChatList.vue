@@ -5,8 +5,8 @@
       <li class="list-group-item" v-for="message in messages" :key="message.id" >
         <span class="float-left">{{message}}</span>        
       </li>
-      <!-- <li class="list-group-item" v-for="user in users" :key="user.id">
-        <span class="float-left" id="join">{{user}}님이 입장하셨습니다</span>
+      <!-- <li class="list-group-item" v-for="culuser in culusers" :key="culuser.id">
+        <span class="float-left" id="join">{{culuser}}</span>
       </li> -->
     </ul>
   </div>
@@ -16,7 +16,7 @@
 
 export default {
   name: "HelloWorld",  
-  props: ["messages","users"],
+  props: ["messages","culusers"],
 };
 </script>
 

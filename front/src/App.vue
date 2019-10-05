@@ -3,8 +3,9 @@
     <div class="col-lg-6 offset-lg-3">
       <div class="card bg-info">
         <Header />
+        <userlist :culusers="culusers" />
         <ChatList :messages="messages" />
-        <ChatList :users="users" />
+        <!-- <ChatList :culusers="culusers" /> -->
         <Input @send="send($event)"/>
       </div>
     </div>
@@ -15,19 +16,23 @@
 import ChatList from "./components/ChatList.vue";
 import Header from "./components/Header.vue";
 import Input from "./components/Input.vue";
+import userlist from "./components/userlist.vue";
 
 export default {
   name: "app",
   components: {
     ChatList,
     Header,
-    Input
+    Input,
+    userlist
   },
   data: function() {
     // data
     return {
       messages: [],
       newMessage: null,
+      culusers: [],
+      // cli_name: null,
       //socket: this.$io("localhost:3000") // socket connection to server
     };
   },
@@ -35,10 +40,19 @@ export default {
   created() {
     // created callback of vue instance
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
+    // this.cli_name=name;
     this.$socket.emit("userdata",name);
+
     this.$socket.on("joinroom",(culname) => {
     alert(culname+" 님이 입장하였습니다.");
     this.messages.push(culname+" 님이 입장하였습니다.");
+    this.culusers.push(culname);
+    });
+
+    this.$socket.on("outroom",(culname) => {
+    alert(culname+" 님이 퇴장하였습니다.");
+    this.messages.push(culname+" 님이 퇴장하였습니다.");
+    this.culusers.pop(culname);
     });
 
     this.$socket.on("chat-message", data => {
