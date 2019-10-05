@@ -19,6 +19,7 @@ connection.connect();
 var sqlname='INSERT INTO users(client_id, name) VALUES(?,?)';
 var sqlselname='SELECT name FROM users WHERE client_id=?';
 var sqldelname='DELETE FROM users WHERE client_id=?';
+var sqldbname='SELECT name FROM users';
 
 app.use(express.static('dist'));  //dist 파일 접근허용
 
@@ -33,7 +34,7 @@ io.on('connection', (socket) => {
         culname=name;
         prams[0]=client_id;
         prams[1]=culname;
-        connection.query(sqlname,prams,function(err,rows,fields){
+        connection.query(sqlname,prams,function(err,rows,fields){ //유저 접속시 db insert
             if(err){
                 console.log(err);
             }
@@ -43,12 +44,22 @@ io.on('connection', (socket) => {
         
         });
         io.emit('joinroom', (culname));
+        // io.emit('dbuser',(rows));
+        connection.query(sqldbname,function(err,rows,fields){ //유저 디비 정보 userlist로 보낼려고
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log('보내@@@@@@@@@@@');
+                io.emit('dbuser',(rows));
+            }
+        })
     });
 
     //   클라이언트 접속 해제 시 DB에서 정보 제거 start  //
     socket.on('disconnect',()=>{
         console.log("연결종료"+socket.id);
-        connection.query(sqlselname,socket.id,function(err,rows,fields){
+        connection.query(sqlselname,socket.id,function(err,rows,fields){ //접속해제시 누가나갔는지 알려고 select
             if(err){
                 console.log(err);
             }
@@ -58,7 +69,7 @@ io.on('connection', (socket) => {
             }
         });
 
-        connection.query(sqldelname,socket.id,function(err,rows,fields){
+        connection.query(sqldelname,socket.id,function(err,rows,fields){ //접속해제시 delete
             if(err){
                 console.log(err);
             }

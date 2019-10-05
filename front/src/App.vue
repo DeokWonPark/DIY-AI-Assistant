@@ -16,7 +16,7 @@
 import ChatList from "./components/ChatList.vue";
 import Header from "./components/Header.vue";
 import Input from "./components/Input.vue";
-import userlist from "./components/userlist.vue";
+import userlist from "./components/userlist.vue"; //채팅인원 보여주는 리스트 .vue
 
 export default {
   name: "app",
@@ -31,7 +31,7 @@ export default {
     return {
       messages: [],
       newMessage: null,
-      culusers: [],
+      culusers: [],  //채팅참여인원[]
       // cli_name: null,
       //socket: this.$io("localhost:3000") // socket connection to server
     };
@@ -40,19 +40,22 @@ export default {
   created() {
     // created callback of vue instance
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
-    // this.cli_name=name;
     this.$socket.emit("userdata",name);
 
     this.$socket.on("joinroom",(culname) => {
     alert(culname+" 님이 입장하였습니다.");
     this.messages.push(culname+" 님이 입장하였습니다.");
-    this.culusers.push(culname);
+    // this.culusers.push(culname);
     });
 
     this.$socket.on("outroom",(culname) => {
     alert(culname+" 님이 퇴장하였습니다.");
     this.messages.push(culname+" 님이 퇴장하였습니다.");
     this.culusers.pop(culname);
+    });
+
+    this.$socket.on("dbuser",(rows)=>{ //디비에서 유저정보 가져옴
+      this.culusers=rows;
     });
 
     this.$socket.on("chat-message", data => {

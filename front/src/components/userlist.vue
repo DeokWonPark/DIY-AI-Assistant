@@ -7,7 +7,7 @@
       
       <ul>
           <li v-for="culuser in culusers" :key="culuser.id" >
-            <span>{{culuser}}</span> 
+            <span>{{culuser.name}}</span> 
           </li>
       </ul>
       </span>
