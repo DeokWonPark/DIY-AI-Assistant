@@ -16,26 +16,45 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-var sqlname='INSERT INTO users(name) VALUES(?)';
+var sqlname='INSERT INTO users(client_id, name) VALUES(?,?)';
+var sqldelname='DELETE FROM users WHERE client_id=?';
 
-app.use(express.static('dist'));
+app.use(express.static('dist'));  //dist 파일 접근허용
 
+var prams=[];
 var culname=null;
+var client_id=null;
+
 io.on('connection', (socket) => {
     console.log(socket.client.id); // Prints client socket id
-
+    client_id=socket.client.id;
     socket.on('userdata',(name) =>{
         culname=name;
-        connection.query(sqlname,name,function(err,row,fields){
+        prams[0]=client_id;
+        prams[1]=culname;
+        connection.query(sqlname,prams,function(err,row,fields){
             if(err){
                 console.log(err);
             }
             else{
-                console.log('입장하신 분 ID:',row.insertId);
+                console.log('디비 딜리트 정상동작');
             }
         
         });
         io.emit('joinroom', (culname));
+    });
+
+    socket.on('disconnect',()=>{
+        console.log("연결종료"+socket.id);
+        connection.query(sqldelname,socket.id,function(err,row,fields){
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log('나가신 분 ID:',row.insertId);
+            }
+        })
+
     });
 
     socket.on('chat-message', (data) => {
@@ -44,4 +63,6 @@ io.on('connection', (socket) => {
     });      
 
 });
+
+
 // connection.end();
