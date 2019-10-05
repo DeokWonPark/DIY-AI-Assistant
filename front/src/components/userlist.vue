@@ -3,7 +3,7 @@
     <button @click="showulist_modal=true"> 채팅방 인원 확인</button>
     <ulist_modal v-if=showulist_modal>
       <span slot="header" @click="showulist_modal = false">
-        대화상대 List <i class="closeModalBtn fas fa-times" aria-hidden="true"></i>
+        <h3>채팅 참여 List <i class="closeModalBtn fas fa-times" aria-hidden="true"></i> </h3>
       
       <ul>
           <li v-for="culuser in culusers" :key="culuser.id" >

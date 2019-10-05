@@ -1,9 +1,10 @@
 <template>
   <div>
-    <ul class="list-group list-group-flush">
+    <ul class="list-group list-group-flush" id="rightgo">
       <!-- Message loop -->
-      <li class="list-group-item" v-for="message in messages" :key="message.id" >
-        <span class="float-left">{{message}}</span>        
+      <li class="list-group-item" v-for="message in messages" :key="message.id">
+        <span class="float-left">{{message}}</span>
+        <!-- <span class="float-left">안녕</span>         -->
       </li>
       <!-- <li class="list-group-item" v-for="culuser in culusers" :key="culuser.id">
         <span class="float-left" id="join">{{culuser}}</span>
@@ -30,7 +31,9 @@ ul {
   max-height: 50vh;
   overflow-y: auto;
 }
-/* #join{
-  background-color: greenyellow
+/* #rightgo{
+  text-align: right;
+  
 } */
+
 </style>

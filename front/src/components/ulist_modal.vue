@@ -37,10 +37,6 @@
   transition: opacity 0.3s ease;
 }
 
-.modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-}
 
 .modal-container {
   width: 300px;
@@ -58,9 +54,8 @@
   color: #62acde;
 }
 
-.modal-footer {
-  margin-top: 0;
-  color: red;
+.modal-header ul li{
+  color:black;
 }
 
 .modal-body {

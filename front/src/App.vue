@@ -32,7 +32,7 @@ export default {
       messages: [],
       newMessage: null,
       culusers: [],  //채팅참여인원[]
-      // cli_name: null,
+      cli_name: null,
       //socket: this.$io("localhost:3000") // socket connection to server
     };
   },
@@ -41,6 +41,7 @@ export default {
     // created callback of vue instance
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
     this.$socket.emit("userdata",name);
+    this.cli_name=name;
 
     this.$socket.on("joinroom",(culname) => {
     alert(culname+" 님이 입장하였습니다.");
@@ -62,6 +63,25 @@ export default {
       // when "chat-message" comes from the server
       console.log("msg received from server");
       this.messages.push(data.message);
+      if(data.message=='안녕'){
+        var d=new Date();
+        var cultime=d.getHours();
+        if(cultime<12 && cultime>1){
+          this.messages.push("챗봇 : "+this.cli_name+"님 즐거운 아침이에요");
+        }
+        else if(cultime>=12 && cultime<18){
+          this.messages.push("챗봇 : "+this.cli_name+"님 점심식사는 하셨나요 ^ㅡ^");
+        }
+        else if(cultime>=18){
+          this.messages.push("챗봇 : "+this.cli_name+"님 굿나잇 @n@ ");
+        }
+        else{
+          this.messages.push("챗봇 : "+this.cli_name+"님 안 주무시나요??");
+        }
+      }
+      else if(data.message=="이름이 뭐야"){
+        this.messages.push("챗봇 : "+this.cli_name+"님의 챗봇입니다.");
+      }
     });
   },
 
