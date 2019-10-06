@@ -16,27 +16,71 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-var sqlname='INSERT INTO users(name) VALUES(?)';
+var sqlname='INSERT INTO users(client_id, name) VALUES(?,?)';
+var sqlselname='SELECT name FROM users WHERE client_id=?';
+var sqldelname='DELETE FROM users WHERE client_id=?';
+var sqldbname='SELECT name FROM users';
 
-app.use(express.static('dist'));
+app.use(express.static('dist'));  //dist 파일 접근허용
 
+var prams=[];
 var culname=null;
+var client_id=null;
+
 io.on('connection', (socket) => {
     console.log(socket.client.id); // Prints client socket id
-
+    client_id=socket.client.id;
     socket.on('userdata',(name) =>{
         culname=name;
-        connection.query(sqlname,name,function(err,row,fields){
+        prams[0]=client_id;
+        prams[1]=culname;
+        connection.query(sqlname,prams,function(err,rows,fields){ //유저 접속시 db insert
             if(err){
                 console.log(err);
             }
             else{
-                console.log('입장하신 분 ID:',row.insertId);
+                console.log('입장하신 분 ID:',rows.insertId);
             }
         
         });
         io.emit('joinroom', (culname));
+        // io.emit('dbuser',(rows));
+        connection.query(sqldbname,function(err,rows,fields){ //유저 디비 정보 userlist로 보낼려고
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log('보내@@@@@@@@@@@');
+                io.emit('dbuser',(rows));
+            }
+        })
     });
+
+    //   클라이언트 접속 해제 시 DB에서 정보 제거 start  //
+    socket.on('disconnect',()=>{
+        console.log("연결종료"+socket.id);
+        connection.query(sqlselname,socket.id,function(err,rows,fields){ //접속해제시 누가나갔는지 알려고 select
+            if(err){
+                console.log(err);
+            }
+            else{
+                io.emit('outroom',(rows[0].name));
+                console.log(rows[0].name);
+            }
+        });
+
+        connection.query(sqldelname,socket.id,function(err,rows,fields){ //접속해제시 delete
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log('디비 딜리트 정상동작');
+            }
+        })
+
+    });
+
+    //   클라이언트 접속 해제 시 DB에서 정보 제거 end  //
 
     socket.on('chat-message', (data) => {
         io.emit('chat-message', (data));
@@ -44,4 +88,6 @@ io.on('connection', (socket) => {
     });      
 
 });
+
+
 // connection.end();
