@@ -82,6 +82,13 @@ export default {
       else if(data.message=="이름이 뭐야"){
         this.messages.push("챗봇 : "+this.cli_name+"님의 챗봇입니다.");
       }
+      else if(data.message=="채팅참여인원"){
+        var str="챗봇 : ";
+        for(var user in this.culusers){
+          str=str+this.culusers[user].name+"님,";
+        }
+        this.messages.push(str+"이 현재 참여중입니다.");
+      }
     });
   },
 
