@@ -6,6 +6,9 @@
         <span class="float-left">{{message}}</span>
         <!-- <span class="float-left">안녕</span>         -->
       </li>
+      <li class="list-group-item" >
+        <span class="float-left" id="typing"> {{typing}} </span>
+      </li>
       <!-- <li class="list-group-item" v-for="culuser in culusers" :key="culuser.id">
         <span class="float-left" id="join">{{culuser}}</span>
       </li> -->
@@ -16,8 +19,23 @@
 <script>
 
 export default {
+  data: function() {
+    return {
+      typing: ''
+    };
+  },
+
   name: "HelloWorld",  
   props: ["messages","culusers"],
+
+  created() {
+    this.$socket.on("typing", data => {
+    // when "chat-message" comes from the server
+    console.log("msg received from server");
+    this.typing = data.typing
+  });
+  }
+
 };
 </script>
 
@@ -30,6 +48,9 @@ h4 {
 ul {
   max-height: 50vh;
   overflow-y: auto;
+}
+#typing{
+  background-color: rgb(169, 236, 233);
 }
 /* #rightgo{
   text-align: right;

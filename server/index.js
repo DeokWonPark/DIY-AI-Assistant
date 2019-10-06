@@ -87,6 +87,12 @@ io.on('connection', (socket) => {
         console.log(data);
     });      
 
+    socket.on('typing', (data) => {
+        io.emit('typing', (data));
+        console.log(data);
+    });     
+
+
 });
 
 

@@ -19,8 +19,29 @@
 export default {
   data: function() {
     return {
-      newMessage: ""
+      newMessage: "",
+      typing: "",
     };
+  },
+  name: "typ",
+  props: ["cli_name"],
+   watch: {
+    newMessage: function() {
+      
+        if(this.newMessage == '')
+        {
+          this.$socket.emit("typing", {
+          typing: "" // emitting "typing" to the server
+        });
+        }
+        
+        else {
+        this.$socket.emit("typing", {
+        typing: this.cli_name+" is typing" // emitting "typing" to the server
+        });
+      }
+    }
   }
+
 };
 </script>

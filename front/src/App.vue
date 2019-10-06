@@ -6,7 +6,8 @@
         <userlist :culusers="culusers" />
         <ChatList :messages="messages" />
         <!-- <ChatList :culusers="culusers" /> -->
-        <Input @send="send($event)"/>
+        <Input @send="send($event)" :cli_name="cli_name"/>
+        <!-- props 등록 -->
       </div>
     </div>
   </div>
