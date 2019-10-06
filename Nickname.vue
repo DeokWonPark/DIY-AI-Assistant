@@ -1,0 +1,63 @@
+<template>
+<div id="app"> <img src="..\logo.png" width="200" height="200"> 
+  <div class="container">    
+    <div class="col-lg-6 offset-lg-3 ">        
+      <div class="card bg-info">
+        <div class="card-header text-white" >
+            <h4>
+            please enter your Nickname
+            </h4>
+        </div>
+        <ul class="list-group list-group-flush "> <!-- Message loop -->   
+          <li>
+            
+          </li>
+        </ul>
+
+        <div class="card-body"> 
+          <form @submit.prevent="send"> <!-- Prevent default event for submit, execute send method instead-->
+            <div class="form-group">
+              <ChatList v-bind:nikname="nikname"/>
+                <input
+                type="text"
+                class="form-control"                
+                placeholder="Enter Nickname here"
+                v-model="nikname"
+              /> <!-- binding with newMessage variable -->
+            
+                
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</template>
+
+<script>
+import io from 'socket.io-client';
+
+
+export default {
+  name: "Nickname",
+  data: function() {  // data
+    return {      
+      nikname: null,
+      newMessage: null,       
+      socket: io("localhost:3000") // socket connection to server
+    };
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+h2, h4 {
+  text-align:left;
+}
+ul {
+  max-height:50vh;
+  overflow-y:auto;
+}
+</style>
