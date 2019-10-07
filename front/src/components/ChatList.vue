@@ -21,7 +21,7 @@
 export default {
   data: function() {
     return {
-      typing: ''
+      typing: '',
     };
   },
 
@@ -31,7 +31,6 @@ export default {
   created() {
     this.$socket.on("typing", data => {
     // when "chat-message" comes from the server
-    console.log("msg received from server");
     this.typing = data.typing
   });
   }
