@@ -1,6 +1,6 @@
 <template>
   <div class="card-body">
-    <form @submit.prevent="$emit('send',cli_name+strtok+newMessage)">
+    <form @submit.prevent="$emit('send',newMessage)">
       <!-- Prevent default event for submit, execute send method instead-->
       <div class="form-group">
         <input
@@ -21,7 +21,6 @@ export default {
     return {
       newMessage: "",
       typing: "",
-      strtok: "님의 채팅:",
     };
   },
   name: "typ",
