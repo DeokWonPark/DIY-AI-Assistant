@@ -61,8 +61,8 @@ export default {
     this.$socket.on("chat-message", data => {
       // when "chat-message" comes from the server
       console.log("msg received from server");
-      this.messages.push(data.message);
-      if(data.message==this.cli_name+'님의 채팅:안녕'){
+      this.messages.push(data.name+"님의 채팅: "+data.message);
+      if(data.message=='안녕' && data.name==this.cli_name){
         var d=new Date();
         var cultime=d.getHours();
         if(cultime<12 && cultime>1){
@@ -78,10 +78,10 @@ export default {
           this.messages.push("JYP : "+this.cli_name+"님 새벽이네요");
         }
       }
-      else if(data.message==this.cli_name+'님의 채팅:이름이 뭐야'){
+      else if(data.message=='이름이 뭐야'&& data.name==this.cli_name){
         this.messages.push("JYP : "+this.cli_name+"님의 챗봇(JYP)입니다.");
       }
-      else if(data.message==this.cli_name+'님의 채팅:채팅참여인원'){
+      else if(data.message=='채팅참여인원'&& data.name==this.cli_name){
         var str="JYP : ";
         for(var user in this.culusers){
           str=str+this.culusers[user].name+"님,";
@@ -96,7 +96,8 @@ export default {
     send(data) {
       // implementation of send method for vue instance
       this.$socket.emit("chat-message", {
-        message: data // emitting "chat-message" to the server
+        message: data, // emitting "chat-message" to the server
+        name: this.cli_name
       });
     }
   }
