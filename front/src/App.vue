@@ -4,7 +4,7 @@
       <div class="card bg-info">
         <Header />
         <userlist :culusers="culusers" />
-        <ChatList :messages="messages" />
+        <ChatList :messages="messages"/>
         <!-- <ChatList :culusers="culusers" /> -->
         <Input @send="send($event)" :cli_name="cli_name"/>
         <!-- props 등록 -->
@@ -45,13 +45,11 @@ export default {
     this.cli_name=name;
 
     this.$socket.on("joinroom",(culname) => {
-    alert(culname+" 님이 입장하였습니다.");
     this.messages.push(culname+" 님이 입장하였습니다.");
     // this.culusers.push(culname);
     });
 
     this.$socket.on("outroom",(culname) => {
-    alert(culname+" 님이 퇴장하였습니다.");
     this.messages.push(culname+" 님이 퇴장하였습니다.");
     this.culusers.pop(culname);
     });
@@ -63,28 +61,28 @@ export default {
     this.$socket.on("chat-message", data => {
       // when "chat-message" comes from the server
       console.log("msg received from server");
-      this.messages.push(data.message);
-      if(data.message=='안녕'){
+      this.messages.push(data.name+"님의 채팅: "+data.message);
+      if(data.message=='안녕' && data.name==this.cli_name){
         var d=new Date();
         var cultime=d.getHours();
         if(cultime<12 && cultime>1){
-          this.messages.push("챗봇 : "+this.cli_name+"님 즐거운 아침이에요");
+          this.messages.push("JYP : "+this.cli_name+"님 즐거운 아침이에요");
         }
         else if(cultime>=12 && cultime<18){
-          this.messages.push("챗봇 : "+this.cli_name+"님 점심식사는 하셨나요 ^ㅡ^");
+          this.messages.push("JYP : "+this.cli_name+"님 점심식사는 하셨나요 ^ㅡ^");
         }
         else if(cultime>=18){
-          this.messages.push("챗봇 : "+this.cli_name+"님 굿나잇 @n@ ");
+          this.messages.push("JYP : "+this.cli_name+"님 굿나잇 @n@ ");
         }
         else{
-          this.messages.push("챗봇 : "+this.cli_name+"님 안 주무시나요??");
+          this.messages.push("JYP : "+this.cli_name+"님 새벽이네요");
         }
       }
-      else if(data.message=="이름이 뭐야"){
-        this.messages.push("챗봇 : "+this.cli_name+"님의 챗봇입니다.");
+      else if(data.message=='이름이 뭐야'&& data.name==this.cli_name){
+        this.messages.push("JYP : "+this.cli_name+"님의 챗봇(JYP)입니다.");
       }
-      else if(data.message=="채팅참여인원"){
-        var str="챗봇 : ";
+      else if(data.message=='채팅참여인원'&& data.name==this.cli_name){
+        var str="JYP : ";
         for(var user in this.culusers){
           str=str+this.culusers[user].name+"님,";
         }
@@ -98,7 +96,8 @@ export default {
     send(data) {
       // implementation of send method for vue instance
       this.$socket.emit("chat-message", {
-        message: data // emitting "chat-message" to the server
+        message: data, // emitting "chat-message" to the server
+        name: this.cli_name
       });
     }
   }

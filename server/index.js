@@ -20,10 +20,12 @@ var sqlname='INSERT INTO users(client_id, name) VALUES(?,?)';
 var sqlselname='SELECT name FROM users WHERE client_id=?';
 var sqldelname='DELETE FROM users WHERE client_id=?';
 var sqldbname='SELECT name FROM users';
+var sqlmsg='INSERT INTO msgdb(name, msg) VALUES(?,?)';
 
 app.use(express.static('dist'));  //dist 파일 접근허용
 
 var prams=[];
+var pramsmsg=[];
 var culname=null;
 var client_id=null;
 
@@ -85,6 +87,16 @@ io.on('connection', (socket) => {
     socket.on('chat-message', (data) => {
         io.emit('chat-message', (data));
         console.log(data);
+        pramsmsg[0]=data.name;
+        pramsmsg[1]=data.message;
+        connection.query(sqlmsg,pramsmsg,function(err,rows,fields){
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log("메세지 정상적인 추가");
+            }
+        })
     });      
 
     socket.on('typing', (data) => {
