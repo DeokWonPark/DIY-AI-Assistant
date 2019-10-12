@@ -49,7 +49,7 @@ ul {
   overflow-y: auto;
 }
 #typing{
-  background-color: rgb(169, 236, 233);
+  background-color: rgb(125, 240, 125);
 }
 /* #rightgo{
   text-align: right;

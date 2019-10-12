@@ -21,6 +21,7 @@ var sqlselname='SELECT name FROM users WHERE client_id=?';
 var sqldelname='DELETE FROM users WHERE client_id=?';
 var sqldbname='SELECT name FROM users';
 var sqlmsg='INSERT INTO msgdb(name, msg) VALUES(?,?)';
+var sqlsearch="SELECT msg FROM msgdb WHERE msg LIKE CONCAT('%', ?,  '%')";
 
 app.use(express.static('dist'));  //dist 파일 접근허용
 
@@ -102,7 +103,19 @@ io.on('connection', (socket) => {
     socket.on('typing', (data) => {
         io.emit('typing', (data));
         console.log(data);
-    });     
+    }); 
+    
+    socket.on('search', (data) => {
+        connection.query(sqlsearch,data.keyword,function(err,rows,fields){
+            if(err){
+                console.log(err);
+            }
+            else{
+                io.emit('search', (rows));
+                console.log(rows);
+            }
+        })
+    });   
 
 
 });
