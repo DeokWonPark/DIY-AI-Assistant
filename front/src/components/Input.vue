@@ -13,7 +13,7 @@
       </div>
     </form>
   </div>
-</template>
+</template> 
 
 <script>
 export default {

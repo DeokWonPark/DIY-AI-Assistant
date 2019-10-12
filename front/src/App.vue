@@ -28,6 +28,7 @@ export default {
     return {
       messages: [],
       newMessage: null,
+      tf: 'f'
       //socket: this.$io("localhost:3000") // socket connection to server
     };
   },
@@ -40,24 +41,29 @@ export default {
     alert(culname+" 님이 입장하였습니다.");
     this.messages.push(culname+" 님이 입장하였습니다.");
     });
-
-    this.$socket.on("chat-message", data => {
+  },
+  watch: {
+    tf: function() {
+      if(this.tf == 't') {
+      this.$socket.on("chat-message", data => {
       // when "chat-message" comes from the server
       console.log("msg received from server");
-      this.messages.push(data.message);
-    });
+      this.messages.push(data.message);      
+        });
+      }
+    }
   },
-
   methods: {
 
     send(data) {
+      this.tf.replace('f','t')
       // implementation of send method for vue instance
       this.$socket.emit("chat-message", {
         message: data // emitting "chat-message" to the server
       });
     }
   }
-};
+}
 </script>
 
 <style>
