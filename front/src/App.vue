@@ -63,7 +63,25 @@ export default {
       // when "chat-message" comes from the server
       console.log("msg received from server");
       this.messages.push(data.name+"님의 채팅: "+data.message);
-      if(data.message=='안녕' && data.name==this.cli_name){
+    });
+
+    this.$socket.on("search",data =>{
+      this.messages.push("@@@@   키워드 검색 결과 -start @@@@");
+      for(var c in data){
+        this.messages.push(data[c].msg+"ㅡ  "+data[c].name+"님이 했던 대화");
+      }
+      this.messages.push("@@@@   키워드 검색 결과 -end @@@@")
+    });
+  },
+
+  methods: {
+
+    send(data) {
+      // implementation of send method for vue instance
+      this.messages.push(this.cli_name+"님의 채팅: "+data) //내가보낸 채팅 그냥 append
+
+
+      if(data=='안녕'){
         var d=new Date();
         var cultime=d.getHours();
         if(cultime<12 && cultime>1){
@@ -79,31 +97,18 @@ export default {
           this.messages.push("JYP : "+this.cli_name+"님 새벽이네요");
         }
       }
-      else if(data.message=='이름이 뭐야'&& data.name==this.cli_name){
+      else if(data=='이름이 뭐야'){
         this.messages.push("JYP : "+this.cli_name+"님의 챗봇(JYP)입니다.");
       }
-      else if(data.message=='채팅참여인원'&& data.name==this.cli_name){
+      else if(data=='채팅참여인원'){
         var str="JYP : ";
         for(var user in this.culusers){
           str=str+this.culusers[user].name+"님,";
         }
         this.messages.push(str+"이 현재 참여중입니다.");
       }
-    });
 
-    this.$socket.on("search",data =>{
-      this.messages.push("@@키워드 검색 결과 -start @@");
-      for(var c in data){
-        this.messages.push(data[c].msg);
-      }
-      this.messages.push("@@키워드 검색 결과 -end @@")
-    });
-  },
 
-  methods: {
-
-    send(data) {
-      // implementation of send method for vue instance
       this.$socket.emit("chat-message", {
         message: data, // emitting "chat-message" to the server
         name: this.cli_name
