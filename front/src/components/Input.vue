@@ -37,7 +37,7 @@ export default {
         
         else {
         this.$socket.emit("typing", {
-        typing: this.cli_name+" is typing" // emitting "typing" to the server
+        typing: this.cli_name+" 님이 채팅 중 입니다" // emitting "typing" to the server
         });
       }
     }

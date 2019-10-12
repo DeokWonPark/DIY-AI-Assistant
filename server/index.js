@@ -21,6 +21,7 @@ var sqlselname='SELECT name FROM users WHERE client_id=?';
 var sqldelname='DELETE FROM users WHERE client_id=?';
 var sqldbname='SELECT name FROM users';
 var sqlmsg='INSERT INTO msgdb(name, msg) VALUES(?,?)';
+var sqlsearch="SELECT * FROM msgdb WHERE msg LIKE CONCAT('%', ?,  '%')";
 
 app.use(express.static('dist'));  //dist 파일 접근허용
 
@@ -85,7 +86,7 @@ io.on('connection', (socket) => {
     //   클라이언트 접속 해제 시 DB에서 정보 제거 end  //
 
     socket.on('chat-message', (data) => {
-        io.emit('chat-message', (data));
+        socket.broadcast.emit('chat-message', (data)); //나를 제외한 모든 사용자 에게만
         console.log(data);
         pramsmsg[0]=data.name;
         pramsmsg[1]=data.message;
@@ -100,9 +101,21 @@ io.on('connection', (socket) => {
     });      
 
     socket.on('typing', (data) => {
-        io.emit('typing', (data));
+        socket.broadcast.emit('typing', (data));
         console.log(data);
-    });     
+    }); 
+    
+    socket.on('search', (data) => {
+        connection.query(sqlsearch,data.keyword,function(err,rows,fields){
+            if(err){
+                console.log(err);
+            }
+            else{
+                io.emit('search', (rows));
+                console.log(rows);
+            }
+        })
+    });   
 
 
 });
