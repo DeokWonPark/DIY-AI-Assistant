@@ -111,7 +111,7 @@ io.on('connection', (socket) => {
                 console.log(err);
             }
             else{
-                io.emit('search', (rows));
+                socket.emit('search', (rows)); //검색한 사용자에게만
                 console.log(rows);
             }
         })
