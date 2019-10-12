@@ -1,8 +1,9 @@
 <template>
   <div class="card-header text-white">
-    <h4 @click="showModal=true">My Chat App</h4>
+    <h3 @click="showModal=true">Melon</h3>
+    <Search @send_keyword="send_keyword($event)"/>
     <modal v-if=showModal>
-      <h3 slot="header">My Chat App</h3>
+      <h3 slot="header">Melon</h3>
       <span slot="footer" @click="showModal = false">
         Version 0.1.1. <i class="closeModalBtn fas fa-times" aria-hidden="true"></i>
       </span>
@@ -11,21 +12,42 @@
 </template>
 
 <script>
-import Modal from './Modal.vue'
+import Modal from './Modal.vue';
+import Search from "./Search.vue";
 export default {
     components:{
-        Modal
+        Modal,
+        Search
     },
     data: function(){
         return{
             showModal:false
         }
+    },
+
+    methods: {
+    send_keyword(data) {
+      // implementation of send method for vue instance
+      this.$socket.emit("search", {
+        keyword: data // emitting "chat-message" to the server
+      });
     }
+  }
 }
 </script>
 
 <style scoped>
-h4 {
+
+h3 {
   text-align: left;
+  color:rgb(94, 226, 68);
+  text-align: center;
+  margin-left: 150px;
+}
+
+.card-header h3,
+.card-header div
+{
+  display: inline;
 }
 </style>

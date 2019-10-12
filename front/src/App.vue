@@ -1,7 +1,8 @@
 <template>
   <div id="app" class="container">
     <div class="col-lg-6 offset-lg-3">
-      <div class="card bg-info">
+      <div class="suze">
+        <!-- class="card bg-info" -->
         <Header />
         <userlist :culusers="culusers" />
         <ChatList :messages="messages"/>
@@ -89,6 +90,14 @@ export default {
         this.messages.push(str+"이 현재 참여중입니다.");
       }
     });
+
+    this.$socket.on("search",data =>{
+      this.messages.push("@@키워드 검색 결과 -start @@");
+      for(var c in data){
+        this.messages.push(data[c].msg);
+      }
+      this.messages.push("@@키워드 검색 결과 -end @@")
+    });
   },
 
   methods: {
@@ -113,4 +122,8 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.suze{
+  background-color:rgb(205, 255, 195);
+}
+
 </style>
