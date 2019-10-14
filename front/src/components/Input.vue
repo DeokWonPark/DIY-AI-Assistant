@@ -1,10 +1,10 @@
 <template>
-  <div class="card-body">
+  <div class="card-body" id="sky">
     <form @submit.prevent="$emit('send',newMessage)">
       <!-- Prevent default event for submit, execute send method instead-->
       <div class="form-group">
         <input
-          type="text"
+          type="newMessage"
           class="form-control"
           placeholder="Enter message here"
           v-model="newMessage"
@@ -45,3 +45,9 @@ export default {
 
 };
 </script>
+<style>
+#sky{
+  background-image:url('bfall.png');
+  opacity:1;
+}
+</style>

@@ -1,12 +1,12 @@
 <template>
   <div>
-    <ul class="list-group list-group-flush" id="rightgo">
+    <ul class="list-group list-group-flush" id="sky" >
       <!-- Message loop -->
-      <li class="list-group-item" v-for="message in messages" :key="message.id">
-        <span class="bubble">{{message}}</span>
+      <li class="list-group-item" id="sky2"  v-for="message in messages" :key="message.id">
+        <span class="bubble" v-bind:style="{float:right}">{{message}}</span>
         <!-- <span class="float-left">안녕</span>         -->
       </li>
-      <li class="list-group-item" >
+      <li class="list-group-item" id="sky2" >
         <span class="float-left" id="typing"> {{typing}} </span>
       </li>
       <!-- <li class="list-group-item" v-for="culuser in culusers" :key="culuser.id">
@@ -14,7 +14,9 @@
       </li> -->
     </ul>
   </div>
+
 </template>
+
 
 <script>
 
@@ -26,7 +28,7 @@ export default {
   },
 
   name: "HelloWorld",  
-  props: ["messages","culusers"],
+  props: ["messages","culusers","right"],
 
   created() {
     this.$socket.on("typing", data => {
@@ -34,7 +36,6 @@ export default {
     this.typing = data.typing
   });
   }
-
 };
 </script>
 
@@ -45,16 +46,16 @@ h4 {
   text-align: left;
 }
 ul {
-  max-height: 50vh;
+  height: 50vh;
   overflow-y: auto;
 }
 #typing{
-  background-color: rgb(125, 240, 125);
+  background-color: rgb(150, 90, 0);
 }
-
 
 .bubble 
 	{
+  font-family: 'Arial';
 	z-index:100;
 	position: relative;
   height: auto;
@@ -81,8 +82,6 @@ ul {
   z-index: 1;
   top:  -18.5px; 
   left: 15px;
-	
-	 
 	}
 	
 	.bubble:before 
@@ -103,5 +102,12 @@ ul {
   text-align: right;
   
 } */
-
+#sky{
+  background-image:url('fall.png');
+  opacity:0.9;
+}
+#sky2{
+  font-weight: bold;
+  background-color: rgba( 255, 255, 255, 0.1);
+}
 </style>

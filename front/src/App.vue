@@ -1,17 +1,18 @@
 <template>
   <div id="app" class="container">
-    <div class="col-lg-6 offset-lg-3">
-      <div class="suze">
+    <div  style="margin:auto;width:50%">
+      <div>
         <!-- class="card bg-info" -->
         <Header />
         <userlist :culusers="culusers" />
-        <ChatList :messages="messages"/>
+        <ChatList :messages="messages" :right="right"/>
         <!-- <ChatList :culusers="culusers" /> -->
         <Input @send="send($event)" :cli_name="cli_name"/>
         <!-- props 등록 -->
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -35,6 +36,7 @@ export default {
       newMessage: null,
       culusers: [],  //채팅참여인원[]
       cli_name: null,
+      right: "left",
       //socket: this.$io("localhost:3000") // socket connection to server
     };
   },
@@ -62,6 +64,7 @@ export default {
     this.$socket.on("chat-message", data => {
       // when "chat-message" comes from the server
       console.log("msg received from server");
+      this.right="left"
       this.messages.push(data.name+"님의 채팅: "+data.message);
     });
 
@@ -76,10 +79,11 @@ export default {
 
   methods: {
 
-    send(data) {
+    send: function(data) {
+      this.$data.newMessage=null;
       // implementation of send method for vue instance
       this.messages.push(this.cli_name+"님의 채팅: "+data) //내가보낸 채팅 그냥 append
-
+      this.right="right"
 
       if(data=='안녕'){
         var d=new Date();
@@ -113,6 +117,7 @@ export default {
         message: data, // emitting "chat-message" to the server
         name: this.cli_name
       });
+      
     }
   }
 };
@@ -127,9 +132,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-.suze{
-  background-color:rgb(205, 255, 195);
-}
+
 
 
 
