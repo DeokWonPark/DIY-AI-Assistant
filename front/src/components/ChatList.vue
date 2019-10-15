@@ -10,7 +10,7 @@
       <li class="list-group-item" id="sky2" >
         <span class="float-left" id="typing" v-if=jyp> 챗봇 기능 on </span>
       </li>
-      <li class="list-group-item" id="sky2">
+      <li class="list-group-item" id="sky2" v-for="typing in typings" :key="typing.id">
         <span class="float-left" id="typing"> {{typing}} </span>
       </li>
     </ul>
@@ -24,8 +24,9 @@
 export default {
   data: function() {
     return {
-      typing: '',
+      typing: [],
       r:"right"
+      count:0,
     };
   },
 
