@@ -3,7 +3,8 @@
     <ul class="list-group list-group-flush" id="sky" >
       <!-- Message loop -->
       <li class="list-group-item" id="sky2"  v-for="message in messages" :key="message.id">
-        <span class="bubble" v-bind:style="{float:right}">{{message}}</span>
+        <span class="bubble" v-if="message.rorls === 'right'" v-bind:style="{float:r}">{{message.msg}}</span>
+        <span class="bubble" v-else v-bind:style="{float:l}">{{message.msg}}</span>        
         <!-- <span class="float-left">안녕</span>         -->
       </li>
       <li class="list-group-item" id="sky2" >
@@ -24,11 +25,14 @@ export default {
   data: function() {
     return {
       typing: '',
+      r: "right",
+      l: "left",
+      index: 0,
     };
   },
 
   name: "HelloWorld",  
-  props: ["messages","culusers","right"],
+  props: ["messages","culusers"],
 
   created() {
     this.$socket.on("typing", data => {

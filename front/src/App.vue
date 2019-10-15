@@ -5,7 +5,7 @@
         <!-- class="card bg-info" -->
         <Header />
         <userlist :culusers="culusers" />
-        <ChatList :messages="messages" :right="right"/>
+        <ChatList :messages="messages"/>
         <!-- <ChatList :culusers="culusers" /> -->
         <Input @send="send($event)" :cli_name="cli_name"/>
         <!-- props 등록 -->
@@ -32,11 +32,10 @@ export default {
   data: function() {
     // data
     return {
-      messages: [],
+      messages: [{msg: '', rorls: ''}],
       newMessage: null,
       culusers: [],  //채팅참여인원[]
       cli_name: null,
-      right: "left",
       //socket: this.$io("localhost:3000") // socket connection to server
     };
   },
@@ -46,14 +45,13 @@ export default {
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
     this.$socket.emit("userdata",name);
     this.cli_name=name;
-
     this.$socket.on("joinroom",(culname) => {
-    this.messages.push(culname+" 님이 입장하였습니다.");
+    this.messages.push(culname+" 님이 입장하였습니다.","left");
     // this.culusers.push(culname);
     });
 
     this.$socket.on("outroom",(culname) => {
-    this.messages.push(culname+" 님이 퇴장하였습니다.");
+    this.messages.push(culname+" 님이 퇴장하였습니다.","left");
     this.culusers.pop(culname);
     });
 
@@ -64,16 +62,17 @@ export default {
     this.$socket.on("chat-message", data => {
       // when "chat-message" comes from the server
       console.log("msg received from server");
-      this.right="left"
-      this.messages.push(data.name+"님의 채팅: "+data.message);
+      this.messages.push(data.name+"님의 채팅: "+data.message,"left");
     });
 
     this.$socket.on("search",data =>{
-      this.messages.push("@@@@   키워드 검색 결과 -start @@@@");
+      this.messages.push("@@@@   키워드 검색 결과 -start @@@@","left");
+
       for(var c in data){
-        this.messages.push(data[c].msg+"ㅡ  "+data[c].name+"님이 했던 대화");
+        this.messages.push(data[c].msg+"ㅡ  "+data[c].name+"님이 했던 대화","left");
+
       }
-      this.messages.push("@@@@   키워드 검색 결과 -end @@@@")
+      this.messages.push("@@@@   키워드 검색 결과 -end @@@@","left")
     });
   },
 
@@ -82,9 +81,8 @@ export default {
     send: function(data) {
       this.$data.newMessage=null;
       // implementation of send method for vue instance
-      this.messages.push(this.cli_name+"님의 채팅: "+data) //내가보낸 채팅 그냥 append
-      this.right="right"
-
+      this.messages.push(this.cli_name+"님의 채팅: "+data,"right"); //내가보낸 채팅 그냥 append
+      this.cli_name = this.my_name;
       if(data=='안녕'){
         var d=new Date();
         var cultime=d.getHours();
