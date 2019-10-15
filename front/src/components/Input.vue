@@ -4,6 +4,7 @@
       <!-- Prevent default event for submit, execute send method instead-->
       <div class="form-group">
         <input
+          id="form-form"
           type="text"
           class="form-control"
           placeholder="Enter message here"
@@ -44,4 +45,5 @@ export default {
   }
 
 };
+
 </script>
