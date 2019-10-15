@@ -25,7 +25,7 @@ export default {
   data: function() {
     return {
       typing: [],
-      r:"right"
+      r:"right",
       count:0,
     };
   },
