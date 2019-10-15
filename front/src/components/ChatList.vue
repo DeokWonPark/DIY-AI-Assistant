@@ -38,7 +38,19 @@ export default {
   created() {
     this.$socket.on("typing", data => {
     // when "chat-message" comes from the server
-    this.typing = data.typing
+    if(data.typing != '') {
+    this.typings.push(data.typing);
+    }
+    else {
+      this.count = 0;
+      for(var i in this.typings) {
+        if(this.typings[i] == data.usr_name+" 님이 채팅 중 입니다") {
+          this.typings.splice(this.count,1);
+          break;
+        }
+        this.count = this.count + 1;
+      }
+    }
   });
   },
   methods: {
