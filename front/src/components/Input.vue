@@ -1,5 +1,5 @@
 <template>
-  <div class="card-body">
+  <div class="card-body" id="sky">
     <form @submit.prevent="$emit('send',newMessage)">
       <!-- Prevent default event for submit, execute send method instead-->
       <div class="form-group">
@@ -14,7 +14,7 @@
       </div>
     </form>
   </div>
-</template>
+</template> 
 
 <script>
 export default {
@@ -45,5 +45,10 @@ export default {
   }
 
 };
-
 </script>
+<style>
+#sky{
+  background-image:url('bfall.png');
+  opacity:1;
+}
+</style>

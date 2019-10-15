@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="list-group list-group-flush" id="rightgo">
+    <ul class="list-group list-group-flush" id="sky" >
       <!-- Message loop -->
       <li class="list-group-item" v-for="message in messages" :key="message.id">
         <span v-bind:style="{float:r}" v-if=mycheck(message)>{{message}}</span>
@@ -18,7 +18,9 @@
       </li> -->
     </ul>
   </div>
+
 </template>
+
 
 <script>
 
@@ -49,7 +51,6 @@ export default {
         return false;
     }
   }
-
 };
 </script>
 
@@ -60,21 +61,68 @@ h4 {
   text-align: left;
 }
 ul {
-  max-height: 50vh;
+  height: 50vh;
   overflow-y: auto;
 }
 #typing{
-  background-color: rgb(125, 240, 125);
+  background-color: rgb(150, 90, 0);
 }
-#typing2{
-  background-color: rgb(238, 255, 81);
-}
-#cli_name{
-    background-color: rgb(159, 125, 240);
-}
+
+.bubble 
+	{
+  font-family: 'Arial';
+	z-index:100;
+	position: relative;
+  height: auto;
+  width: 45%;
+  float: left;
+	padding: 10px 10px 10px 10px;
+	background: #FFFFFF;
+	border-radius: 20px;
+	border: #7F7F7F solid 1px;
+	position: auto;
+	font-size: 16px;
+	text-align: left;
+	}
+	
+	.bubble:after 
+	{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 0 16px 20px 17.5px;
+	border-color: #FFFFFF transparent;
+	display: block;
+	width: 0;
+  z-index: 1;
+  top:  -18.5px; 
+  left: 15px;
+	}
+	
+	.bubble:before 
+	{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 0 16px 20px 17.5px;
+	border-color: #7F7F7F transparent;
+	display: block;
+	width: 0;
+  z-index: 0;
+  left: 15px;
+	top: -20px;
+	
+	}
 /* #rightgo{
   text-align: right;
   
 } */
-
+#sky{
+  background-image:url('fall.png');
+  opacity:0.9;
+}
+#sky2{
+  font-weight: bold;
+  background-color: rgba( 255, 255, 255, 0.1);
+}
 </style>

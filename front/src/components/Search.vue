@@ -38,7 +38,7 @@ export default {
   height: 42px;
   padding-left: 15px;
   border-radius: 42px;
-  border: 2px solid #55ff71;
+  border: 2px solid #eeff55;
   background: rgb(255, 255, 255);
   outline: none;
   position: relative;

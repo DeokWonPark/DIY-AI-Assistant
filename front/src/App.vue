@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="container">
-    <div class="col-lg-6 offset-lg-3">
-      <div class="suze">
+    <div  style="margin:auto;width:50%">
+      <div>
         <!-- class="card bg-info" -->
         <Header />
         <userlist :culusers="culusers" />
@@ -12,6 +12,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 
@@ -46,7 +47,7 @@ export default {
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
     this.$socket.emit("userdata",name);
     this.cli_name=name;
-
+    this.my_name=name;
     this.$socket.on("joinroom",(culname) => {
     this.messages.push(culname+" 님이 입장하였습니다.\n");
     // this.culusers.push(culname);
@@ -126,7 +127,7 @@ export default {
         message: data, // emitting "chat-message" to the server
         name: this.cli_name
       });
-      }
+      
     }
   }
 };
@@ -141,8 +142,8 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-.suze{
-  background-color:rgb(205, 255, 195);
-}
+
+
+
 
 </style>
