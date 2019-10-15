@@ -9,9 +9,9 @@
         <!-- <ChatList :culusers="culusers" /> -->
         <Input @send="send($event)" :cli_name="cli_name"/>
         <!-- props 등록 -->
+        <audio src="music.wav" autoplay controls loop></audio>
       </div>
     </div>
-    <audio src="music.mp3" autoplay controls></audio>
   </div>
 </template>
 
