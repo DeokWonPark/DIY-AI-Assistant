@@ -1,17 +1,18 @@
 <template>
   <div id="app" class="container">
-    <div class="col-lg-6 offset-lg-3">
-      <div class="suze">
+    <div  style="margin:auto;width:50%">
+      <div>
         <!-- class="card bg-info" -->
         <Header />
         <userlist :culusers="culusers" />
-        <ChatList :messages="messages"/>
+        <ChatList :messages="messages" :my_name="my_name"/>
         <!-- <ChatList :culusers="culusers" /> -->
         <Input @send="send($event)" :cli_name="cli_name"/>
         <!-- props 등록 -->
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -35,6 +36,7 @@ export default {
       newMessage: null,
       culusers: [],  //채팅참여인원[]
       cli_name: null,
+      my_name: null,
       //socket: this.$io("localhost:3000") // socket connection to server
     };
   },
@@ -44,7 +46,7 @@ export default {
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
     this.$socket.emit("userdata",name);
     this.cli_name=name;
-
+    this.my_name=name;
     this.$socket.on("joinroom",(culname) => {
     this.messages.push(culname+" 님이 입장하였습니다.");
     // this.culusers.push(culname);
@@ -76,11 +78,11 @@ export default {
 
   methods: {
 
-    send(data) {
+    send: function(data) {
+      this.$data.newMessage=null;
       // implementation of send method for vue instance
-      this.messages.push(this.cli_name+"님의 채팅: "+data) //내가보낸 채팅 그냥 append
-
-
+      this.messages.push(this.cli_name+"님의 채팅: "+data); //내가보낸 채팅 그냥 append
+      this.cli_name = this.my_name;
       if(data=='안녕'){
         var d=new Date();
         var cultime=d.getHours();
@@ -113,6 +115,7 @@ export default {
         message: data, // emitting "chat-message" to the server
         name: this.cli_name
       });
+      
     }
   }
 };
@@ -127,8 +130,8 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-.suze{
-  background-color:rgb(205, 255, 195);
-}
+
+
+
 
 </style>

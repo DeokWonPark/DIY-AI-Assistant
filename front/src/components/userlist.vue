@@ -1,6 +1,6 @@
 <template>
   <div id="listyle">
-    <button @click="showulist_modal=true"> 채팅방 인원 확인</button>
+    <marquee loop="1000" direction="right" opacity:0.1>♪ WelCome! Beatles Chatroom ♪</marquee>
     <ulist_modal v-if=showulist_modal>
       <span slot="header" @click="showulist_modal = false">
         <h3>채팅 참여 List <i class="closeModalBtn fas fa-times" aria-hidden="true"></i> </h3>
@@ -33,7 +33,9 @@ export default {
 </script>
 <style>
 #listyle{
-background-color: rgb(186, 221, 223);
+  background-image:url('star.png');
+  opacity:0.9;
+  color:rgb(255, 255, 0);
 }
 button{
     width: 100%;
