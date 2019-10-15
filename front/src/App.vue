@@ -5,7 +5,7 @@
         <!-- class="card bg-info" -->
         <Header />
         <userlist :culusers="culusers" />
-        <ChatList :messages="messages"/>
+        <ChatList :messages="messages" :my_name="my_name"/>
         <!-- <ChatList :culusers="culusers" /> -->
         <Input @send="send($event)" :cli_name="cli_name"/>
         <!-- props 등록 -->
@@ -32,14 +32,11 @@ export default {
   data: function() {
     // data
     return {
-      messages: [{msg: '', rorls: ''}],
+      messages: [],
       newMessage: null,
-<<<<<<< HEAD
-      tf: 'f'
-=======
       culusers: [],  //채팅참여인원[]
       cli_name: null,
->>>>>>> master
+      my_name: null,
       //socket: this.$io("localhost:3000") // socket connection to server
     };
   },
@@ -49,57 +46,42 @@ export default {
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
     this.$socket.emit("userdata",name);
     this.cli_name=name;
+    this.my_name=name;
     this.$socket.on("joinroom",(culname) => {
-    this.messages.push(culname+" 님이 입장하였습니다.","left");
+    this.messages.push(culname+" 님이 입장하였습니다.");
     // this.culusers.push(culname);
     });
 
     this.$socket.on("outroom",(culname) => {
-    this.messages.push(culname+" 님이 퇴장하였습니다.","left");
+    this.messages.push(culname+" 님이 퇴장하였습니다.");
     this.culusers.pop(culname);
     });
 
     this.$socket.on("dbuser",(rows)=>{ //디비에서 유저정보 가져옴
       this.culusers=rows;
     });
-  },
-  watch: {
-    tf: function() {
-      if(this.tf == 't') {
-      this.$socket.on("chat-message", data => {
+
+    this.$socket.on("chat-message", data => {
       // when "chat-message" comes from the server
       console.log("msg received from server");
-<<<<<<< HEAD
-      this.messages.push(data.message);      
-        });
-      }
-    }
-=======
-      this.messages.push(data.name+"님의 채팅: "+data.message,"left");
+      this.messages.push(data.name+"님의 채팅: "+data.message);
     });
 
     this.$socket.on("search",data =>{
-      this.messages.push("@@@@   키워드 검색 결과 -start @@@@","left");
-
+      this.messages.push("@@@@   키워드 검색 결과 -start @@@@");
       for(var c in data){
-        this.messages.push(data[c].msg+"ㅡ  "+data[c].name+"님이 했던 대화","left");
-
+        this.messages.push(data[c].msg+"ㅡ  "+data[c].name+"님이 했던 대화");
       }
-      this.messages.push("@@@@   키워드 검색 결과 -end @@@@","left")
+      this.messages.push("@@@@   키워드 검색 결과 -end @@@@")
     });
->>>>>>> master
   },
+
   methods: {
 
-<<<<<<< HEAD
-    send(data) {
-      this.tf.replace('f','t')
-=======
     send: function(data) {
       this.$data.newMessage=null;
->>>>>>> master
       // implementation of send method for vue instance
-      this.messages.push(this.cli_name+"님의 채팅: "+data,"right"); //내가보낸 채팅 그냥 append
+      this.messages.push(this.cli_name+"님의 채팅: "+data); //내가보낸 채팅 그냥 append
       this.cli_name = this.my_name;
       if(data=='안녕'){
         var d=new Date();
@@ -136,7 +118,7 @@ export default {
       
     }
   }
-}
+};
 </script>
 
 <style>
