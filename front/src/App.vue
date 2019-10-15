@@ -5,7 +5,7 @@
         <!-- class="card bg-info" -->
         <Header />
         <userlist :culusers="culusers" />
-        <ChatList :messages="messages" :cli_name="cli_name"/>
+        <ChatList :messages="messages" :jyp="jyp" :cli_name="cli_name"/>
         <!-- <ChatList :culusers="culusers" /> -->
         <Input @send="send($event)" :cli_name="cli_name"/>
         <!-- props 등록 -->
@@ -14,6 +14,7 @@
   </div>
 
 </template>
+
 
 <script>
 import ChatList from "./components/ChatList.vue";
@@ -36,7 +37,7 @@ export default {
       newMessage: null,
       culusers: [],  //채팅참여인원[]
       cli_name: null,
-      my_name: null,
+      jyp: false,
       //socket: this.$io("localhost:3000") // socket connection to server
     };
   },
@@ -48,7 +49,7 @@ export default {
     this.cli_name=name;
     this.my_name=name;
     this.$socket.on("joinroom",(culname) => {
-    this.messages.push(culname+" 님이 입장하였습니다.");
+    this.messages.push(culname+" 님이 입장하였습니다.\n");
     // this.culusers.push(culname);
     });
 
@@ -65,6 +66,7 @@ export default {
       // when "chat-message" comes from the server
       console.log("msg received from server");
       this.messages.push(data.name+"님의 채팅: "+data.message);
+      this.my=false;
     });
 
     this.$socket.on("search",data =>{
@@ -78,40 +80,50 @@ export default {
 
   methods: {
 
-    send: function(data) {
-      this.$data.newMessage=null;
+    send(data) {
+      document.getElementById("form-form").value="";
       // implementation of send method for vue instance
-      this.messages.push(this.cli_name+"님의 채팅: "+data); //내가보낸 채팅 그냥 append
-      this.cli_name = this.my_name;
-      if(data=='안녕'){
+      this.messages.push(this.cli_name+"님의 채팅: "+data) //내가보낸 채팅 그냥 append
+
+      if(data=='비틀즈 on'){
+        this.jyp=true;
+      }
+      else if(data=='비틀즈 off'){
+        this.jyp=false;
+      }
+      if(this.jyp==true){
+
+        if(data=='안녕'){
         var d=new Date();
         var cultime=d.getHours();
         if(cultime<12 && cultime>1){
-          this.messages.push("JYP : "+this.cli_name+"님 즐거운 아침이에요");
+          this.messages.push("비틀즈 : "+this.cli_name+"님 즐거운 아침이에요");
         }
         else if(cultime>=12 && cultime<18){
-          this.messages.push("JYP : "+this.cli_name+"님 점심식사는 하셨나요 ^ㅡ^");
+          this.messages.push("비틀즈 : "+this.cli_name+"님 점심식사는 하셨나요 ^ㅡ^");
         }
         else if(cultime>=18){
-          this.messages.push("JYP : "+this.cli_name+"님 굿나잇 @n@ ");
+          this.messages.push("비틀즈 : "+this.cli_name+"님 굿나잇 @n@ ");
         }
         else{
-          this.messages.push("JYP : "+this.cli_name+"님 새벽이네요");
+          this.messages.push("비틀즈 : "+this.cli_name+"님 새벽이네요");
         }
       }
-      else if(data=='이름이 뭐야'){
-        this.messages.push("JYP : "+this.cli_name+"님의 챗봇(JYP)입니다.");
-      }
-      else if(data=='채팅참여인원'){
-        var str="JYP : ";
-        for(var user in this.culusers){
-          str=str+this.culusers[user].name+"님,";
+        else if(data=='이름이 뭐야'){
+          this.messages.push("비틀즈 : "+this.cli_name+"님의 챗봇(비틀즈)입니다.");
         }
-        this.messages.push(str+"이 현재 참여중입니다.");
+        else if(data=='채팅참여인원'){
+          var str="비틀즈 : ";
+          for(var user in this.culusers){
+            str=str+this.culusers[user].name+"님,";
+          }
+          this.messages.push(str+"이 현재 참여중입니다.");
+        }
+
       }
 
-
-      this.$socket.emit("chat-message", {
+      if(this.jyp==false){
+        this.$socket.emit("chat-message", {
         message: data, // emitting "chat-message" to the server
         name: this.cli_name
       });
