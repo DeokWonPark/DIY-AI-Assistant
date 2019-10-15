@@ -2,12 +2,15 @@
   <div>
     <ul class="list-group list-group-flush" id="sky" >
       <!-- Message loop -->
-      <li class="list-group-item" id="sky2"  v-for="message in messages" :key="message.id">
-        <span class="bubble" v-if="right === '1'" v-bind:style="{float:right}">{{message}}</span>
-        <span class="bubble" v-else v-bind:style="{float:right}">{{message}}</span>
+      <li class="list-group-item" v-for="message in messages" :key="message.id">
+        <span v-bind:style="{float:r}" v-if=mycheck(message)>{{message}}</span>
+        <span class="float-left" v-else>{{message}}</span>
         <!-- <span class="float-left">안녕</span>         -->
       </li>
-      <li class="list-group-item" id="sky2" >
+      <li class="list-group-item" >
+        <span class="float-left" id="typing2" v-if=jyp> 챗봇 기능 on </span>
+      </li>
+      <li class="list-group-item" >
         <span class="float-left" id="typing"> {{typing}} </span>
       </li>
       <!-- <li class="list-group-item" v-for="culuser in culusers" :key="culuser.id">
@@ -25,17 +28,28 @@ export default {
   data: function() {
     return {
       typing: '',
+      r:"right"
     };
   },
 
   name: "HelloWorld",  
-  props: ["messages","culusers","rights"],
+  props: ["messages","culusers","jyp","cli_name"],
 
   created() {
     this.$socket.on("typing", data => {
     // when "chat-message" comes from the server
     this.typing = data.typing
   });
+  },
+  methods: {
+    mycheck(message){
+      var msg=message.split(':');
+      if(msg[0]==this.cli_name+"님의 채팅"){
+        return true;
+      }
+      else
+        return false;
+    }
   }
 };
 </script>

@@ -4,7 +4,8 @@
       <!-- Prevent default event for submit, execute send method instead-->
       <div class="form-group">
         <input
-          type="newMessage"
+          id="form-form"
+          type="text"
           class="form-control"
           placeholder="Enter message here"
           v-model="newMessage"
