@@ -1,22 +1,45 @@
 <template>
   <div>
-    <ul class="list-group list-group-flush">
+    <ul class="list-group list-group-flush" id="sky" >
       <!-- Message loop -->
-      <li class="list-group-item" v-for="message in messages" :key="message.id" >
-        <span class="float-left">{{message}}</span>        
+      <li class="list-group-item" id="sky2"  v-for="message in messages" :key="message.id">
+        <span class="bubble" v-if="message.rorls === 'right'" v-bind:style="{float:r}">{{message.msg}}</span>
+        <span class="bubble" v-else v-bind:style="{float:l}">{{message.msg}}</span>        
+        <!-- <span class="float-left">안녕</span>         -->
       </li>
-      <!-- <li class="list-group-item" v-for="user in users" :key="user.id">
-        <span class="float-left" id="join">{{user}}님이 입장하셨습니다</span>
+      <li class="list-group-item" id="sky2" >
+        <span class="float-left" id="typing"> {{typing}} </span>
+      </li>
+      <!-- <li class="list-group-item" v-for="culuser in culusers" :key="culuser.id">
+        <span class="float-left" id="join">{{culuser}}</span>
       </li> -->
     </ul>
   </div>
+
 </template>
+
 
 <script>
 
 export default {
+  data: function() {
+    return {
+      typing: '',
+      r: "right",
+      l: "left",
+      index: 0,
+    };
+  },
+
   name: "HelloWorld",  
-  props: ["messages","users"],
+  props: ["messages","culusers"],
+
+  created() {
+    this.$socket.on("typing", data => {
+    // when "chat-message" comes from the server
+    this.typing = data.typing
+  });
+  }
 };
 </script>
 
@@ -27,10 +50,68 @@ h4 {
   text-align: left;
 }
 ul {
-  max-height: 50vh;
+  height: 50vh;
   overflow-y: auto;
 }
-/* #join{
-  background-color: greenyellow
+#typing{
+  background-color: rgb(150, 90, 0);
+}
+
+.bubble 
+	{
+  font-family: 'Arial';
+	z-index:100;
+	position: relative;
+  height: auto;
+  width: 45%;
+  float: left;
+	padding: 10px 10px 10px 10px;
+	background: #FFFFFF;
+	border-radius: 20px;
+	border: #7F7F7F solid 1px;
+	position: auto;
+	font-size: 16px;
+	text-align: left;
+	}
+	
+	.bubble:after 
+	{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 0 16px 20px 17.5px;
+	border-color: #FFFFFF transparent;
+	display: block;
+	width: 0;
+  z-index: 1;
+  top:  -18.5px; 
+  left: 15px;
+	}
+	
+	.bubble:before 
+	{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 0 16px 20px 17.5px;
+	border-color: #7F7F7F transparent;
+	display: block;
+	width: 0;
+  z-index: 0;
+  left: 15px;
+	top: -20px;
+	
+	}
+/* #rightgo{
+  text-align: right;
+  
 } */
+#sky{
+  background-image:url('fall.png');
+  opacity:0.9;
+}
+#sky2{
+  font-weight: bold;
+  background-color: rgba( 255, 255, 255, 0.1);
+}
 </style>
