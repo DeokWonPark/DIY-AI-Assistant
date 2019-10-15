@@ -11,8 +11,8 @@
         <!-- props 등록 -->
       </div>
     </div>
+    <audio src="music.mp3" autoplay controls></audio>
   </div>
-
 </template>
 
 
@@ -47,7 +47,7 @@ export default {
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
     this.$socket.emit("userdata",name);
     this.cli_name=name;
-    this.my_name=name;
+
     this.$socket.on("joinroom",(culname) => {
     this.messages.push(culname+" 님이 입장하였습니다.\n");
     // this.culusers.push(culname);
@@ -66,7 +66,6 @@ export default {
       // when "chat-message" comes from the server
       console.log("msg received from server");
       this.messages.push(data.name+"님의 채팅: "+data.message);
-      this.my=false;
     });
 
     this.$socket.on("search",data =>{
@@ -127,23 +126,20 @@ export default {
         message: data, // emitting "chat-message" to the server
         name: this.cli_name
       });
-      
+      }
     }
   }
 };
 </script>
 
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-
-
+  #app {
+    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
 
 </style>

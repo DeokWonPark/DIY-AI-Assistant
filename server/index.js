@@ -10,7 +10,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : 'apmsetup',
+  password : '111111',
   database : 'user_info'
 });
 

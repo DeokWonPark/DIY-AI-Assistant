@@ -2,20 +2,17 @@
   <div>
     <ul class="list-group list-group-flush" id="sky" >
       <!-- Message loop -->
-      <li class="list-group-item" v-for="message in messages" :key="message.id">
-        <span v-bind:style="{float:r}" v-if=mycheck(message)>{{message}}</span>
-        <span class="float-left" v-else>{{message}}</span>
+      <li class="list-group-item" id="sky2" v-for="message in messages" :key="message.id">
+        <span class="bubble" v-bind:style="{float:r}" v-if=mycheck(message)>{{message}}</span>
+        <span class="bubble" v-else>{{message}}</span>
         <!-- <span class="float-left">안녕</span>         -->
       </li>
-      <li class="list-group-item" >
-        <span class="float-left" id="typing2" v-if=jyp> 챗봇 기능 on </span>
+      <li class="list-group-item" id="sky2" >
+        <span class="float-left" id="typing" v-if=jyp> 챗봇 기능 on </span>
       </li>
-      <li class="list-group-item" >
+      <li class="list-group-item" id="sky2">
         <span class="float-left" id="typing"> {{typing}} </span>
       </li>
-      <!-- <li class="list-group-item" v-for="culuser in culusers" :key="culuser.id">
-        <span class="float-left" id="join">{{culuser}}</span>
-      </li> -->
     </ul>
   </div>
 
@@ -65,7 +62,8 @@ ul {
   overflow-y: auto;
 }
 #typing{
-  background-color: rgb(150, 90, 0);
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 251, 0);
 }
 
 .bubble 
@@ -113,10 +111,7 @@ ul {
 	top: -20px;
 	
 	}
-/* #rightgo{
-  text-align: right;
-  
-} */
+
 #sky{
   background-image:url('fall.png');
   opacity:0.9;
