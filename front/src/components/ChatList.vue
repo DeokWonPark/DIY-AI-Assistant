@@ -7,7 +7,7 @@
         <span class="bubble" v-else v-bind:style="{float:right}">{{message}}</span>
         <!-- <span class="float-left">안녕</span>         -->
       </li>
-      <li class="list-group-item" id="sky2" >
+      <li class="list-group-item" id="sky2" v-for="typing in typings" :key="typing.id" >
         <span class="float-left" id="typing"> {{typing}} </span>
       </li>
       <!-- <li class="list-group-item" v-for="culuser in culusers" :key="culuser.id">
@@ -24,17 +24,30 @@
 export default {
   data: function() {
     return {
-      typing: '',
+      typings: [],
+      count:0,
     };
   },
 
-  name: "HelloWorld",  
-  props: ["messages","culusers","rights"],
+  name: "HelloWorld",
+  props: ["messages","culusers","cli_name"],
 
   created() {
     this.$socket.on("typing", data => {
     // when "chat-message" comes from the server
-    this.typing = data.typing
+    if(data.typing != '') {
+    this.typings.push(data.typing);
+    }
+    else {
+      this.count = 0;
+      for(var i in this.typings) {
+        if(this.typings[i] == data.usr_name+" 님이 채팅 중 입니다") {
+          this.typings.splice(this.count,1);
+          break;
+        }
+        this.count = this.count + 1;
+      }
+    }
   });
   }
 };

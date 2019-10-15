@@ -5,7 +5,7 @@
         <!-- class="card bg-info" -->
         <Header />
         <userlist :culusers="culusers" />
-        <ChatList :messages="messages" :my_name="my_name"/>
+        <ChatList :messages="messages" :cli_name="cli_name"/>
         <!-- <ChatList :culusers="culusers" /> -->
         <Input @send="send($event)" :cli_name="cli_name"/>
         <!-- props 등록 -->

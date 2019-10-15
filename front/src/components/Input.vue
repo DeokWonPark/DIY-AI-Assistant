@@ -21,23 +21,28 @@ export default {
     return {
       newMessage: "",
       typing: "",
+      count:1,
     };
   },
   name: "typ",
   props: ["cli_name"],
    watch: {
     newMessage: function() {
-      
+        
         if(this.newMessage == '')
         {
+          this.count = this.count - 1
           this.$socket.emit("typing", {
-          typing: "" // emitting "typing" to the server
+          typing: "", // emitting "typing" to the server
+          usr_name: this.cli_name,
         });
         }
         
-        else {
+        else if(this.count == 1) {
+        this.count = this.count + 1
         this.$socket.emit("typing", {
-        typing: this.cli_name+" 님이 채팅 중 입니다" // emitting "typing" to the server
+        typing: this.cli_name+" 님이 채팅 중 입니다", // emitting "typing" to the server
+        usr_name: this.cli_name,
         });
       }
     }
