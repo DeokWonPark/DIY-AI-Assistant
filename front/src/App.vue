@@ -80,7 +80,7 @@ export default {
   methods: {
 
     send(data) {
-      document.getElementById("form-form").value="";
+      document.getElementById("form-form").value='';
       // implementation of send method for vue instance
       this.messages.push(this.cli_name+"님의 채팅: "+data) //내가보낸 채팅 그냥 append
 
