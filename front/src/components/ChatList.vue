@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="scrollDiv">
     <ul class="list-group list-group-flush" id="sky" >
       <!-- Message loop -->
       <li class="list-group-item" id="sky2" v-for="message in messages" :key="message.id">
@@ -51,6 +51,7 @@ export default {
     }
   });
   },
+  
   methods: {
     mycheck(message){
       var msg=message.split(':');
@@ -62,6 +63,7 @@ export default {
     }
   }
 };
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
