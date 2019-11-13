@@ -68,6 +68,12 @@ export default {
       this.messages.push(data.name+"님의 채팅: "+data.message);
     });
 
+    this.$socket.on("chat-messagebot", data => {
+      // when "chat-message" comes from the server
+      console.log("msg received from server");
+      this.messages.push(data.message);
+    });
+
     this.$socket.on("search",data =>{
       this.messages.push("@@@@   키워드 검색 결과 -start @@@@");
       for(var c in data){
@@ -86,39 +92,16 @@ export default {
 
       if(data=='비틀즈 on'){
         this.jyp=true;
+        data.message="";
       }
       else if(data=='비틀즈 off'){
         this.jyp=false;
       }
       if(this.jyp==true){
-
-        if(data=='안녕'){
-        var d=new Date();
-        var cultime=d.getHours();
-        if(cultime<12 && cultime>1){
-          this.messages.push("비틀즈 : "+this.cli_name+"님 즐거운 아침이에요");
-        }
-        else if(cultime>=12 && cultime<18){
-          this.messages.push("비틀즈 : "+this.cli_name+"님 점심식사는 하셨나요 ^ㅡ^");
-        }
-        else if(cultime>=18){
-          this.messages.push("비틀즈 : "+this.cli_name+"님 굿나잇 @n@ ");
-        }
-        else{
-          this.messages.push("비틀즈 : "+this.cli_name+"님 새벽이네요");
-        }
-      }
-        else if(data=='이름이 뭐야'){
-          this.messages.push("비틀즈 : "+this.cli_name+"님의 챗봇(비틀즈)입니다.");
-        }
-        else if(data=='채팅참여인원'){
-          var str="비틀즈 : ";
-          for(var user in this.culusers){
-            str=str+this.culusers[user].name+"님,";
-          }
-          this.messages.push(str+"이 현재 참여중입니다.");
-        }
-
+        this.$socket.emit("chat-messagebot", {
+        message: data, // emitting "chat-message" to the server
+        name: this.cli_name
+      });
       }
 
       if(this.jyp==false){

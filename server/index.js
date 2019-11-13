@@ -1,10 +1,28 @@
 const express = require('express');
+const fs = require("fs"); //s
 const app = express();
 const server = app.listen(3000,function(){
     console.log('Listening on port *: 3000');
 })
 
 const io = require('socket.io')(server);
+const dialogflow = require("dialogflow");  //s
+const keyFile = JSON.parse(fs.readFileSync("key.json"));  //s
+
+const projectId = keyFile["project_id"];
+const privateKey = keyFile["private_key"];
+const clientEmail = keyFile["client_email"];
+
+console.log(projectId, privateKey, clientEmail);
+
+let config = {
+    credentials: {
+      private_key: privateKey,
+      client_email: clientEmail
+    }
+  };
+const sessionClient = new dialogflow.SessionsClient(config);
+
 //  데이터베이스 코드 start //
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
@@ -87,6 +105,7 @@ io.on('connection', (socket) => {
 
     socket.on('chat-message', (data) => {
         socket.broadcast.emit('chat-message', (data)); //나를 제외한 모든 사용자 에게만
+        //await tryDF(data.message);
         console.log(data);
         pramsmsg[0]=data.name;
         pramsmsg[1]=data.message;
@@ -99,6 +118,39 @@ io.on('connection', (socket) => {
             }
         })
     });      
+
+    socket.on('chat-messagebot', (data) => {
+        //socket.emit('chat-messagebot', (data)); //나한테만
+        tryDF(data.message);
+        console.log(data);
+        // pramsmsg[0]=data.name;
+        // pramsmsg[1]=data.message;
+        // connection.query(sqlmsg,pramsmsg,function(err,rows,fields){
+        //     if(err){
+        //         console.log(err);
+        //     }
+        //     else{
+        //         console.log("메세지 정상적인 추가");
+        //     }
+        // })
+    });      
+
+
+    async function tryDF(data) {
+        let response = await detectIntent(projectId, socket.client.id, data, "ko-KR");
+        console.log("response:" + response.queryResult.fulfillmentText);
+        // console.log(response.queryResult.action);
+        // console.log(response.queryResult.parameters);
+        // console.log(response.queryResult.allRequiredParamsPresent);
+        //console.log(response.queryResult.outputContexts);
+    
+         let payload = response.queryResult.fulfillmentMessages.find(elem=>{return elem.message==='payload'});
+         if (payload){console.log(payload.payload.fields.hint.stringValue);}
+    
+        socket.emit("chat-messagebot", {
+          message: "비틀즈: " + response.queryResult.fulfillmentText
+        });
+      }
 
     socket.on('typing', (data) => {
         socket.broadcast.emit('typing', (data));
@@ -119,6 +171,31 @@ io.on('connection', (socket) => {
 
 
 });
+
+async function detectIntent(projectId, sessionId, query, languageCode) {
+    // The path to identify the agent that owns the created intent.
+    const sessionPath = sessionClient.sessionPath(projectId, sessionId);
+  
+    // The text query request.
+    const request = {
+      session: sessionPath,
+      queryInput: {
+        text: {
+          text: query,
+          languageCode: languageCode
+        }
+      }
+    };
+  
+    // if (contexts && contexts.length > 0) {
+    //   request.queryParams = {
+    //     contexts: contexts,
+    //   };
+    // }
+  
+    const responses = await sessionClient.detectIntent(request); //dialogflow 제공함수 핵심
+    return responses[0]; //response에 담긴다
+  }
 
 
 // connection.end();
