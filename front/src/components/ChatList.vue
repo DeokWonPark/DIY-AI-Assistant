@@ -8,6 +8,15 @@
         <!-- <span class="float-left">안녕</span>         -->
       </li>
       <li class="list-group-item" id="sky2" >
+        <span class="float-left" id="typing" v-if=jyp>
+          <b-button-group>
+            <b-button v-on:click="fir" id="selbut">{{select1}}</b-button>
+            <b-button v-on:click="sec" id="selbut">{{select2}}</b-button>
+            <b-button v-on:click="thr" id="selbut">{{select3}}</b-button>
+          </b-button-group>
+        </span>
+      </li> 
+      <li class="list-group-item" id="sky2" >
         <span class="float-left" id="typing" v-if=jyp> 챗봇 기능 on </span>
       </li>
       <li class="list-group-item" id="sky2" v-for="typing in typings" :key="typing.id">
@@ -24,14 +33,17 @@
 export default {
   data: function() {
     return {
+      select1:"안녕",
+      select2:"오늘 휴강이야?",
+      select3:"스앱",
       typings: [],
       r:"right",
       count:0,
-    };
+    }; 
   },
 
   name: "HelloWorld",  
-  props: ["messages","culusers","jyp","cli_name"],
+  props: ["messages","culusers","jyp","cli_name"], // 챗봇 네임 추가
 
   created() {
     this.$socket.on("typing", data => {
@@ -53,6 +65,27 @@ export default {
   },
   
   methods: {
+    fir: function () {
+      this.messages.push(this.cli_name+"님의 채팅: "+ this.select1)
+      this.$socket.emit("chat-messagebot", {      
+        message: this.select1, // emitting "chat-message" to the server
+        name: this.cli_name
+      })
+    },
+    sec: function () {
+      this.messages.push(this.cli_name+"님의 채팅: "+ this.select2)
+      this.$socket.emit("chat-messagebot", {      
+        message: this.select2, // emitting "chat-message" to the server
+        name: this.cli_name
+      })
+    },
+    thr: function () {
+        this.messages.push(this.cli_name+"님의 채팅: "+ this.select3)
+        this.$socket.emit("chat-messagebot", {      
+        message: this.select3, // emitting "chat-message" to the server
+        name: this.cli_name
+      })
+    },
     mycheck(message){
       var msg=message.split(':');
       if(msg[0]==this.cli_name+"님의 채팅"){
@@ -80,7 +113,6 @@ ul {
   background-color: rgb(0, 0, 0);
   color: rgb(255, 251, 0);
 }
-
 .bubble 
 	{
   font-family: 'Arial';
@@ -97,13 +129,13 @@ ul {
 	font-size: 16px;
 	text-align: left;
 	}
-	
+
 	.bubble:after 
 	{
 	content: '';
 	position: absolute;
 	border-style: solid;
-	border-width: 0 16px 20px 17.5px;
+	border-width: 0 0px 0px 17.5px;
 	border-color: #FFFFFF transparent;
 	display: block;
 	width: 0;
@@ -117,7 +149,7 @@ ul {
 	content: '';
 	position: absolute;
 	border-style: solid;
-	border-width: 0 16px 20px 17.5px;
+	border-width: 0 0px 0px 17.5px;
 	border-color: #7F7F7F transparent;
 	display: block;
 	width: 0;
@@ -134,5 +166,12 @@ ul {
 #sky2{
   font-weight: bold;
   background-color: rgba( 255, 255, 255, 0.1);
+}
+#selbut{
+  background-color: rgb( 129, 193, 71);
+  padding-left: 10dp;
+}
+#selbut:hover{
+  background-color: rgb( 0, 128, 0);
 }
 </style>

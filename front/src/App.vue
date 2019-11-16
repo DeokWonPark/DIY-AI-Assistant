@@ -33,6 +33,7 @@ export default {
   data: function() {
     // data
     return {
+      start: 0,
       messages: [],
       newMessage: null,
       culusers: [],  //채팅참여인원[]
@@ -89,18 +90,25 @@ export default {
       document.getElementById("form-form").value='';
       // implementation of send method for vue instance
       this.messages.push(this.cli_name+"님의 채팅: "+data) //내가보낸 채팅 그냥 append
-
-      if(data=='비틀즈 on'){
+      
+        if(data=='비틀즈 on'){
         this.jyp=true;
+          if(this.start<1) {
+            this.messages.push("안녕하세요. 뮤직봇 비틀즈 입니다. 당신과 친구가 되어서 기뻐요! ^^ 저는 이런것들을 도와드릴 수 있어요.") //내가보낸 채팅 그냥 append
+            this.start = this.start + 1;
+        }
         data.message="";
       }
       else if(data=='비틀즈 off'){
         this.jyp=false;
+        this.start = 0;
       }
       if(this.jyp==true){
-        this.$socket.emit("chat-messagebot", {
+
+        this.$socket.emit("chat-messagebot", {      
         message: data, // emitting "chat-message" to the server
         name: this.cli_name
+        // 챗봇 네임 선언
       });
       }
 
