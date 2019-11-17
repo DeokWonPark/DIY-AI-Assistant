@@ -13,9 +13,10 @@
             <b-button v-on:click="fir" id="selbut">{{select1}}</b-button>
             <b-button v-on:click="sec" id="selbut">{{select2}}</b-button>
             <b-button v-on:click="thr" id="selbut">{{select3}}</b-button>
+            <b-button v-on:click="four" id="selbut">{{select4}}</b-button>
           </b-button-group>
         </span>
-      </li> 
+      </li>
       <li class="list-group-item" id="sky2" >
         <span class="float-left" id="typing" v-if=jyp> 챗봇 기능 on </span>
       </li>
@@ -33,10 +34,12 @@
 export default {
   data: function() {
     return {
-      select1:"안녕",
+      select1:"최신 노래 추천!",
       select2:"오늘 휴강이야?",
       select3:"스앱",
+      select4:"도움말",
       typings: [],
+      bots: [],
       r:"right",
       count:0,
     }; 
@@ -62,6 +65,17 @@ export default {
       }
     }
   });
+    this.$socket.on("chat-messagebot", data => {
+    // when "chat-message" comes from the server
+    console.log("msg received from server");
+    this.bots=data.message.split('/');
+    this.select1 = this.bots[1];
+    this.select2 = this.bots[2];
+    this.select3 = this.bots[3];
+    this.messages.push(this.bots[0]);
+
+
+    });
   },
   
   methods: {
@@ -86,6 +100,13 @@ export default {
         name: this.cli_name
       })
     },
+    four: function () {
+        this.messages.push(this.cli_name+"님의 채팅: "+ this.select4)
+        this.$socket.emit("chat-messagebot", {      
+        message: this.select4, // emitting "chat-message" to the server
+        name: this.cli_name
+      })
+    },    
     mycheck(message){
       var msg=message.split(':');
       if(msg[0]==this.cli_name+"님의 채팅"){

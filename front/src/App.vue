@@ -38,7 +38,9 @@ export default {
       newMessage: null,
       culusers: [],  //채팅참여인원[]
       cli_name: null,
-      jyp: false,
+      jyp: false
+      //socket: io("https://cbc85fc3.ngrok.io") // socket connection to server
+
       //socket: this.$io("localhost:3000") // socket connection to server
     };
   },
@@ -69,11 +71,7 @@ export default {
       this.messages.push(data.name+"님의 채팅: "+data.message);
     });
 
-    this.$socket.on("chat-messagebot", data => {
-      // when "chat-message" comes from the server
-      console.log("msg received from server");
-      this.messages.push(data.message);
-    });
+
 
     this.$socket.on("search",data =>{
       this.messages.push("@@@@   키워드 검색 결과 -start @@@@");
