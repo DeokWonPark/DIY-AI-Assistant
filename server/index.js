@@ -41,7 +41,7 @@ var sqldbname='SELECT name FROM users';
 var sqlmsg='INSERT INTO msgdb(name, msg) VALUES(?,?)';
 var sqlsearch="SELECT * FROM msgdb WHERE msg LIKE CONCAT('%', ?,  '%')";
 
-//app.use(express.static('dist'));  //dist 파일 접근허용
+app.use(express.static('dist'));  //dist 파일 접근허용
 
 var prams=[];
 var pramsmsg=[];
@@ -95,6 +95,7 @@ io.on('connection', (socket) => {
                 console.log(err);
             }
             else{
+
                 console.log('디비 딜리트 정상동작');
             }
         })

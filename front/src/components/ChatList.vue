@@ -1,5 +1,6 @@
 <template>
   <div id="scrollDiv">
+    <button type="button" @click="notify">Show notification</button>
     <ul class="list-group list-group-flush" id="sky" >
       <!-- Message loop -->
       <li class="list-group-item" id="sky2" v-for="message in messages" :key="message.id">
@@ -34,15 +35,15 @@
 export default {
   data: function() {
     return {
-      select1:"최신 노래 추천!",
-      select2:"오늘 휴강이야?",
-      select3:"스앱",
+      select1:"실시간 멜론차트",
+      select2:"히팝!대결",
+      select3:"생각중",
       select4:"도움말",
       typings: [],
       bots: [],
       r:"right",
       count:0,
-    }; 
+    };
   },
 
   name: "HelloWorld",  
@@ -79,6 +80,7 @@ export default {
   },
   
   methods: {
+
     fir: function () {
       this.messages.push(this.cli_name+"님의 채팅: "+ this.select1)
       this.$socket.emit("chat-messagebot", {      
@@ -127,7 +129,7 @@ h4 {
   text-align: left;
 }
 ul {
-  height: 50vh;
+  height: 70vh;
   overflow-y: auto;
 }
 #typing{
@@ -181,7 +183,7 @@ ul {
 	}
 
 #sky{
-  background-image:url('fall.png');
+  background-color:rgb(0, 180, 0);
   opacity:0.9;
 }
 #sky2{

@@ -1,18 +1,14 @@
 <template>
-  <div id="app" class="container">
-    <div  style="margin:auto;width:50%">
       <div>
         <!-- class="card bg-info" -->
         <Header />
         <userlist :culusers="culusers" />
         <ChatList :messages="messages" :jyp="jyp" :cli_name="cli_name"/>
         <!-- <ChatList :culusers="culusers" /> -->
+        
         <Input @send="send($event)" :cli_name="cli_name"/>
         <!-- props 등록 -->
-        <audio src="music.mp3" autoplay controls loop></audio>
       </div>
-    </div>
-  </div>
 </template>
 
 
@@ -21,8 +17,10 @@ import ChatList from "./components/ChatList.vue";
 import Header from "./components/Header.vue";
 import Input from "./components/Input.vue";
 import userlist from "./components/userlist.vue"; //채팅인원 보여주는 리스트 .vue
-
+import Vue from 'vue'
+import VueNativeNotification from 'vue-native-notification'
 export default {
+  
   name: "app",
   components: {
     ChatList,
@@ -38,14 +36,16 @@ export default {
       newMessage: null,
       culusers: [],  //채팅참여인원[]
       cli_name: null,
-      jyp: false
-      //socket: io("https://cbc85fc3.ngrok.io") // socket connection to server
-
-      //socket: this.$io("localhost:3000") // socket connection to server
+      jyp: false,
     };
   },
 
   created() {
+    Vue.use(VueNativeNotification, {
+    // Automatic permission request before
+    // showing notification (default: true)
+    requestOnNotify: true
+    });
     // created callback of vue instance
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
     this.$socket.emit("userdata",name);
@@ -66,9 +66,12 @@ export default {
     });
 
     this.$socket.on("chat-message", data => {
+      notify();
       // when "chat-message" comes from the server
       console.log("msg received from server");
       this.messages.push(data.name+"님의 채팅: "+data.message);
+      ServiceWorkerRegistration.show
+
     });
 
 
@@ -83,7 +86,12 @@ export default {
   },
 
   methods: {
-
+    notify () {
+      // https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification#Parameters
+      this.$notification.show('Hello World', {
+        body: 'This is an example!'
+      }, {})
+    },
     send(data) {
       document.getElementById("form-form").value='';
       // implementation of send method for vue instance
