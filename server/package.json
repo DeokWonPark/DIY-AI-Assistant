@@ -12,6 +12,7 @@
     "express": "4.17.1",
     "mysql": "2.17.1",
     "node-mysql": "^0.4.2",
+    "python-shell": "^1.0.8",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {},

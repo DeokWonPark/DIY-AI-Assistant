@@ -2,9 +2,9 @@
   <div id="scrollDiv">
     <ul class="list-group list-group-flush" id="sky" >
       <!-- Message loop -->
-      <li class="list-group-item" id="sky2" v-for="message in messages" :key="message.id">
+      <li class="list-group-item" id="sky2" v-for="message in messages" :key="message.id" >
         <span class="bubble" v-bind:style="{float:r}" v-if=mycheck(message)>{{message}}</span>
-        <span class="bubble" v-else>{{message}}</span>
+        <span id="chatsong" class="bubble" v-else>{{message}}</span>
         <!-- <span class="float-left">안녕</span>         -->
       </li>
       <li class="list-group-item" id="sky2" >
@@ -52,6 +52,7 @@ export default {
   });
   },
   
+  
   methods: {
     mycheck(message){
       var msg=message.split(':');
@@ -61,7 +62,14 @@ export default {
       else
         return false;
     }
+  },
+  watch: {
+    messages: function() {
+        setTimeout(function(){document.getElementById("sky").scrollTop=document.getElementById("sky").scrollHeight;},100)
+    }
   }
+
+  
 };
 
 </script>

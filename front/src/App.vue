@@ -22,6 +22,7 @@ import Header from "./components/Header.vue";
 import Input from "./components/Input.vue";
 import userlist from "./components/userlist.vue"; //채팅인원 보여주는 리스트 .vue
 
+
 export default {
   name: "app",
   components: {
@@ -38,7 +39,8 @@ export default {
       culusers: [],  //채팅참여인원[]
       cli_name: null,
       jyp: false,
-      //socket: this.$io("localhost:3000") // socket connection to server
+      path:null,
+     // socket: io("https://838beac0.ngrok.io") // socket connection to server
     };
   },
 
@@ -63,15 +65,41 @@ export default {
     });
 
     this.$socket.on("chat-message", data => {
-      // when "chat-message" comes from the server
       console.log("msg received from server");
       this.messages.push(data.name+"님의 채팅: "+data.message);
     });
 
     this.$socket.on("chat-messagebot", data => {
-      // when "chat-message" comes from the server
       console.log("msg received from server");
       this.messages.push(data.message);
+    });
+
+
+    this.$socket.on("song-chat",data =>{
+      var newDivHtml;
+      if(data.length<=1){
+        newDivHtml = "<li> ---- 멜론차트 TOP 1 ---- </li>";
+        var newImgHtml = '<img src={{path}} id="sad" width="80dp" height="80dp">';
+        newDivHtml = newDivHtml+ newImgHtml+(data[0].ranking+"등. 노래:"+data[0].title+"ㅡ  "+data[0].artist)+"</br>";
+      }
+      else{
+        newDivHtml = "<li> ---- 멜론차트 TOP 50 ---- </li>";
+        for(var c in data){
+        newDivHtml = newDivHtml+ (data[c].ranking+"등. 노래:"+data[c].title+"ㅡ  "+data[c].artist)+"</br>";
+        }
+      }
+  
+      this.chartdiv = parent.document.createElement("ul");
+      this.chartdiv.id = "songchart";
+      this.chartdiv.innerHTML = newDivHtml;
+      var iBlock = document.getElementById("sky");
+      var liBlock = iBlock.getElementsByTagName("li");
+
+      parent.document.getElementById("sky").insertBefore(this.chartdiv,liBlock[this.messages.length]);
+
+      
+      document.getElementById("sad").src=data[0].imagepath;
+
     });
 
     this.$socket.on("search",data =>{
@@ -124,5 +152,9 @@ export default {
     color: #2c3e50;
     margin-top: 60px;
   }
+  #songchart{
+  color: #FFFFFF;
+  border: 5px solid navy;
+}
 
 </style>

@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require("fs"); //s
 const app = express();
+
 const server = app.listen(3000,function(){
     console.log('Listening on port *: 3000');
 })
@@ -23,6 +24,7 @@ let config = {
   };
 const sessionClient = new dialogflow.SessionsClient(config);
 
+
 //  데이터베이스 코드 start //
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
@@ -40,6 +42,8 @@ var sqldelname='DELETE FROM users WHERE client_id=?';
 var sqldbname='SELECT name FROM users';
 var sqlmsg='INSERT INTO msgdb(name, msg) VALUES(?,?)';
 var sqlsearch="SELECT * FROM msgdb WHERE msg LIKE CONCAT('%', ?,  '%')";
+var sqlchart='SELECT imagepath, title , artist, ranking FROM melonchart ';
+var sqlfirstchart='SELECT imagepath, title , artist, ranking FROM melonchart WHERE ranking=1';
 
 app.use(express.static('dist'));  //dist 파일 접근허용
 
@@ -145,7 +149,34 @@ io.on('connection', (socket) => {
         //console.log(response.queryResult.outputContexts);
     
          let payload = response.queryResult.fulfillmentMessages.find(elem=>{return elem.message==='payload'});
-         if (payload){console.log(payload.payload.fields.hint.stringValue);}
+         if (payload){
+             console.log(payload.payload.fields.hint.stringValue);
+             switch (payload.payload.fields.hint.stringValue){
+                 case "음원":
+                        connection.query(sqlchart,function(err,rows,fields){
+                            if(err){
+                                console.log(err);
+                            }
+                            else{
+                                socket.emit('song-chat', (rows)); //검색한 사용자에게만
+                                console.log(rows);
+                            }
+                        })
+
+                case"1위":
+                    connection.query(sqlfirstchart,function(err,rows,fields){
+                        if(err){
+                            console.log(err);
+                        }
+                        else{
+                            socket.emit('song-chat', (rows)); //검색한 사용자에게만
+                            console.log(rows);
+                        }
+                    })
+
+             }
+            
+            }
     
         socket.emit("chat-messagebot", {
           message: "비틀즈: " + response.queryResult.fulfillmentText
