@@ -95,12 +95,13 @@ export default {
         console.log(data.sql);
         console.log("추천곡");
         wh=data.sql;
-        newDivHtml = "<li> ---- 추천 플레이리스트 ---- </li><li> 현재 날씨에 어울리는 곡 </li>";
+        newDivHtml = "<li> ---- 추천 플레이리스트 ---- </li><li> #현재 날씨에 어울리는 곡# </li>";
         for(var c in data.rows){
         newDivHtml = newDivHtml+(data.rows[c].title+"ㅡ  "+data.rows[c].artist)+"</br>";
         }
         this.chartdiv = parent.document.createElement("ul");
-        this.chartdiv.id = "songchartwd";
+        this.chartdiv.classList.add("songchartwd");
+        this.chartdiv.id="songchartwd";
         this.chartdiv.innerHTML = newDivHtml;
       }
       else{
@@ -119,16 +120,24 @@ export default {
       this.count=this.count+1;
 
       if(wh=="sun"){
-        document.getElementById("songchartwd").style.backgroundImage="url('sun.jpg')"
+        for(var s in document.getElementsByClassName("songchartwd")){
+          document.getElementsByClassName("songchartwd")[s].style.backgroundImage="url('sun.jpg')"
+        }
       }
       else if(wh=="cloud"){
-        document.getElementById("songchartwd").style.backgroundImage="url('cloud.jpg')"
+        for(s in document.getElementsByClassName("songchartwd")){
+          document.getElementsByClassName("songchartwd")[s].style.backgroundImage="url('cloud.jpg')"
+        }
       }
       else if(wh=="rain"){
-        document.getElementById("songchartwd").style.backgroundImage="url('rain.jpg')"
+        for(s in document.getElementsByClassName("songchartwd")){
+          document.getElementsByClassName("songchartwd")[s].style.backgroundImage="url('rain.jpg')"
+        }
       }
       else if(wh=="snow"){
-        document.getElementById("songchartwd").style.backgroundImage="url('snow.jpg')"
+        for(s in document.getElementsByClassName("songchartwd")){
+          document.getElementsByClassName("songchartwd")[s].style.backgroundImage="url('snow.jpg')"
+        }
       }
       for(var e in document.getElementsByName("sad")){
         document.getElementsByName("sad")[e].src=data[0].imagepath;
