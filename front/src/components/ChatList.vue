@@ -1,6 +1,6 @@
 <template>
   <div id="scrollDiv">
-    <button type="button" @click="notify">Show notification</button>
+    
     <ul class="list-group list-group-flush" id="sky" >
       <!-- Message loop -->
       <li class="list-group-item" id="sky2" v-for="message in messages" :key="message.id">
@@ -32,6 +32,7 @@
 
 <script>
 
+
 export default {
   data: function() {
     return {
@@ -50,6 +51,8 @@ export default {
   props: ["messages","culusers","jyp","cli_name"], // 챗봇 네임 추가
 
   created() {
+
+
     this.$socket.on("typing", data => {
     // when "chat-message" comes from the server
     if(data.typing != '') {
@@ -68,7 +71,6 @@ export default {
   });
     this.$socket.on("chat-messagebot", data => {
     // when "chat-message" comes from the server
-    console.log("msg received from server");
     this.bots=data.message.split('/');
     this.select1 = this.bots[1];
     this.select2 = this.bots[2];

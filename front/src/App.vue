@@ -1,5 +1,6 @@
 <template>
       <div>
+        <button type="button" @click="notify">Show notification</button>
         <!-- class="card bg-info" -->
         <Header />
         <userlist :culusers="culusers" />
@@ -8,7 +9,9 @@
         
         <Input @send="send($event)" :cli_name="cli_name"/>
         <!-- props 등록 -->
+
       </div>
+      
 </template>
 
 
@@ -46,6 +49,8 @@ export default {
     // showing notification (default: true)
     requestOnNotify: true
     });
+    this.$notification.requestPermission()
+  .then(console.log)
     // created callback of vue instance
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
     this.$socket.emit("userdata",name);
@@ -66,9 +71,7 @@ export default {
     });
 
     this.$socket.on("chat-message", data => {
-      notify();
       // when "chat-message" comes from the server
-      console.log("msg received from server");
       this.messages.push(data.name+"님의 채팅: "+data.message);
       ServiceWorkerRegistration.show
 
