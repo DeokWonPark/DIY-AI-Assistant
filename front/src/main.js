@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import io from "socket.io-client"
 
- Vue.prototype.$socket = io("https://8b45c981.ngrok.io")
+ Vue.prototype.$socket = io("https://65dc3130.ngrok.io")
 
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false

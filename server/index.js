@@ -24,6 +24,27 @@ let config = {
   };
 const sessionClient = new dialogflow.SessionsClient(config);
 
+//  공공데이터 3rdparty start //
+var request=require("request");
+
+const o_url="http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData?";
+const o_key="yeQe5B%2FWXc9Hm9X9NNY3cDMgVYKpEQtrtCKW6A7p%2BnimDYIYcnyP7cN%2BtAelNm66hKKMoFm7Zkpe3Lzr6qbuWQ%3D%3D"
+const o_data=[];
+const date=new Date();
+var gdate;
+if(date.getDate()<10){
+    gdate="0"+date.getDate();
+}
+o_data[0]=date.getFullYear()+""+(date.getMonth()+1)+""+gdate;
+o_data[1]="0500";
+o_data[2]="86"
+o_data[3]="96"
+
+const api_url=o_url+"serviceKey="+o_key+"&base_date="+o_data[0]+"&base_time="+o_data[1]+"&nx="+o_data[2]+"&ny="+o_data[3]+"&_type=json";
+
+var wheather="";
+
+
 
 //  데이터베이스 코드 start //
 var mysql      = require('mysql');
@@ -44,6 +65,10 @@ var sqlmsg='INSERT INTO msgdb(name, msg) VALUES(?,?)';
 var sqlsearch="SELECT * FROM msgdb WHERE msg LIKE CONCAT('%', ?,  '%')";
 var sqlchart='SELECT imagepath, title , artist, ranking FROM melonchart ';
 var sqlfirstchart='SELECT imagepath, title , artist, ranking FROM melonchart WHERE ranking=1';
+var sqlsun = 'SELECT * FROM sunpy';
+var sqlrain = 'SELECT * FROM rainpy';
+var sqlsnow = 'SELECT * FROM snowpy';
+var sqlcloud = 'SELECT * FROM cloudpy';
 
 app.use(express.static('dist'));  //dist 파일 접근허용
 
@@ -173,6 +198,103 @@ io.on('connection', (socket) => {
                             console.log(rows);
                         }
                     })
+
+                case"추천":
+                    var sql='';
+                    request({
+                        url: api_url,
+                        method : 'GET'
+                    }, function(error, response, body){
+                        //console.log('Status', response.statusCode);
+                        //console.log('Headers', JSON.stringify(response.headers));
+                        console.log('Response Received', body);
+                        //console.log('/////////////////////', body);
+                        wheather=JSON.parse(body);
+                        console.log(wheather.response.body.items.item);
+                        for(c in wheather.response.body.items.item){
+                            if(wheather.response.body.items.item[c].category=='PTY'){ //날씨
+                                switch(wheather.response.body.items.item[c].fcstValue){
+                                    case 0:
+                                        console.log("햇빛 쨍쨍");
+                                        connection.query(sqlsun,function(err,rows,fields){
+                                            if(err){
+                                                console.log(err);
+                                            }
+                                            else{
+                                                socket.emit('song-chat', 
+                                                {rows:rows,
+                                                 sql:"sun"
+                                                }); //검색한 사용자에게만
+                                                console.log(rows);
+                                            }
+                                        })
+                                        break;
+                                    case 1:
+                                        console.log("비온다");
+                                        connection.query(sqlrain,function(err,rows,fields){
+                                            if(err){
+                                                console.log(err);
+                                            }
+                                            else{
+                                                socket.emit('song-chat', 
+                                                {   rows:rows,
+                                                    sql:"rain"
+                                                   }); //검색한 사용자에게만
+                                                console.log(rows);
+                                            }
+                                        })
+                                        break;
+                                    case 2:
+                                        console.log("비/눈");
+                                        connection.query(sqlrain,function(err,rows,fields){
+                                            if(err){
+                                                console.log(err);
+                                            }
+                                            else{
+                                                socket.emit('song-chat', 
+                                                {   rows:rows,
+                                                    sql:"rain"
+                                                   }); //검색한 사용자에게만
+                                                console.log(rows);
+                                            }
+                                        })
+                                        break;
+                                    case 3:
+                                        console.log(" 우왕 눈온다 !!!!");
+                                        connection.query(sqlsnow,function(err,rows,fields){
+                                            if(err){
+                                                console.log(err);
+                                            }
+                                            else{
+                                                socket.emit('song-chat', 
+                                                {   rows:rows,
+                                                    sql:"snow"
+                                                   }); //검색한 사용자에게만
+                                                console.log(rows);
+                                            }
+                                        })
+                                        break;
+                                    case 4:
+                                        console.log("소나기 와");
+                                        connection.query(sqlcloud,function(err,rows,fields){
+                                            if(err){
+                                                console.log(err);
+                                            }
+                                            else{
+                                                socket.emit('song-chat', 
+                                                {   rows:rows,
+                                                    sql:"cloud"
+                                                   }); //검색한 사용자에게만
+                                                console.log(rows);
+                                            }
+                                        })
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                    });
 
              }
             

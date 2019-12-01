@@ -77,15 +77,26 @@ export default {
 
     this.$socket.on("song-chat",data =>{
       var newDivHtml;
+      var wh;
       if(data.length<=1){
         newDivHtml = "<li> ---- 멜론차트 TOP 1 ---- </li>";
         var newImgHtml = '<img src={{path}} id="sad" width="80dp" height="80dp">';
         newDivHtml = newDivHtml+ newImgHtml+(data[0].ranking+"등. 노래:"+data[0].title+"ㅡ  "+data[0].artist)+"</br>";
       }
+
+      else if(data.rows.imagepath==undefined){
+        console.log(data.rows);
+        console.log(data.sql);
+        wh=data.sql;
+        newDivHtml = "<li> ---- 추천 플레이리스트 ---- </li><li> 현재 날씨에 어울리는 곡 </li>";
+        for(var c in data.rows){
+        newDivHtml = newDivHtml+(data.rows[c].title+"ㅡ  "+data.rows[c].artist)+"</br>";
+        }
+      }
       else{
         newDivHtml = "<li> ---- 멜론차트 TOP 50 ---- </li>";
-        for(var c in data){
-        newDivHtml = newDivHtml+ (data[c].ranking+"등. 노래:"+data[c].title+"ㅡ  "+data[c].artist)+"</br>";
+        for(var i in data){
+        newDivHtml = newDivHtml+ (data[i].ranking+"등. 노래:"+data[i].title+"ㅡ  "+data[i].artist)+"</br>";
         }
       }
   
@@ -97,6 +108,18 @@ export default {
 
       parent.document.getElementById("sky").insertBefore(this.chartdiv,liBlock[this.messages.length]);
 
+      if(wh=="sun"){
+        document.getElementById("songchart").style.backgroundImage="url('sun.jpg')"
+      }
+      else if(wh=="cloud"){
+        document.getElementById("songchart").style.backgroundImage="url('cloud.jpg')"
+      }
+      else if(wh=="rain"){
+        document.getElementById("songchart").style.backgroundImage="url('rain.jpg')"
+      }
+      else if(wh=="snow"){
+        document.getElementById("songchart").style.backgroundImage="url('snow.jpg')"
+      }
       
       document.getElementById("sad").src=data[0].imagepath;
 
