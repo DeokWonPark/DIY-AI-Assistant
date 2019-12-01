@@ -187,6 +187,7 @@ io.on('connection', (socket) => {
                                 console.log(rows);
                             }
                         })
+                        break;
 
                 case"1위":
                     connection.query(sqlfirstchart,function(err,rows,fields){
@@ -198,6 +199,7 @@ io.on('connection', (socket) => {
                             console.log(rows);
                         }
                     })
+                    break;
 
                 case"추천":
                     var sql='';
@@ -295,6 +297,7 @@ io.on('connection', (socket) => {
                             }
                         }
                     });
+                    break;
 
              }
             
