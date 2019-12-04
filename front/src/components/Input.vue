@@ -14,6 +14,7 @@
       </div>
     </form>
   </div>
+
 </template> 
 
 <script>
@@ -53,7 +54,7 @@ export default {
 </script>
 <style>
 #sky{
-  background-image:url('bfall.png');
+  background-color:rgb(0, 180, 0);
   opacity:1;
 }
 </style>

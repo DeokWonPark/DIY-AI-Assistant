@@ -33,9 +33,9 @@ export default {
 </script>
 <style>
 #listyle{
-  background-image:url('star.png');
+  background-color:rgb(0, 180, 0);
   opacity:0.9;
-  color:rgb(255, 255, 0);
+  color:rgb(255, 255, 255);
 }
 button{
     width: 100%;

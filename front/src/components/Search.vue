@@ -1,7 +1,7 @@
 <template>
     <div class="searchcss">
-      <form @submit.prevent="$emit('send_keyword',keyword)">
-        <input 
+      <form @submit.prevent="$emit('send_keyword',keyword)" >
+        <input
         type="text" 
         placeholder="검색어 입력"
         v-model="keyword"

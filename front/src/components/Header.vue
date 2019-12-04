@@ -38,14 +38,12 @@ export default {
 
 <style scoped>
 #star{
-  background-image:url('star.png');
+  background-color: rgb(123,63,0);
   opacity:0.9;
 }
 h3 {
   text-align: left;
-  color:rgb(255, 255, 0);
-  text-align: center;
-  margin-left: 150px;
+  color:rgb(255, 255, 255);
 }
 
 .card-header h3,
