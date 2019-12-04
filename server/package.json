@@ -14,7 +14,8 @@
     "mysql": "2.17.1",
     "node-mysql": "^0.4.2",
     "socket.io": "^2.2.0",
-    "vue-native-notification": "^1.0.5"
+    "vue-native-notification": "^1.0.5",
+    "web-push": "^3.4.2"
   },
   "devDependencies": {},
   "keywords": [],

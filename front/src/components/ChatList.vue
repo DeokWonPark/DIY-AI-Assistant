@@ -15,7 +15,21 @@
             <b-button v-on:click="sec" id="selbut">{{select2}}</b-button>
             <b-button v-on:click="thr" id="selbut">{{select3}}</b-button>
             <b-button v-on:click="four" id="selbut">{{select4}}</b-button>
-          </b-button-group>
+          </b-button-group> 
+          <table>
+        <!--    <thead></thead>
+            <tbody>
+              <tr>
+              <td>  <button v-on:click="fir" id="selbut">{{select1}}</button> </td>
+              <td></td>
+              <td>  <button v-on:click="fir" id="selbut">{{select1}}</button> </td>
+              <td></td>
+              <td>  <button v-on:click="fir" id="selbut">{{select1}}</button> </td>
+              <td></td>
+              <td>  <button v-on:click="fir" id="selbut">{{select1}}</button> </td>
+              </tr>
+            </tbody>
+          </table> -->
         </span>
       </li>
       <li class="list-group-item" id="sky2" >
@@ -199,4 +213,5 @@ ul {
 #selbut:hover{
   background-color: rgb( 0, 128, 0);
 }
+
 </style>

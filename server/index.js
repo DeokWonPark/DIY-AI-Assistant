@@ -13,7 +13,6 @@ const projectId = keyFile["project_id"];
 const privateKey = keyFile["private_key"];
 const clientEmail = keyFile["client_email"];
 
-console.log(projectId, privateKey, clientEmail);
 
 let config = {
     credentials: {
@@ -47,7 +46,6 @@ var prams=[];
 var pramsmsg=[];
 var culname=null;
 var client_id=null;
-
 io.on('connection', (socket) => {
     console.log(socket.client.id); // Prints client socket id
     client_id=socket.client.id;
@@ -76,13 +74,6 @@ io.on('connection', (socket) => {
             }
         })
     });
-    socket.on( 'new_notification', function( data ) {
-        console.log(data.title,data.message);
-        io.sockets.emit( 'show_notification', { 
-          title: data.title, 
-          message: data.message, 
-        });
-      });
     //   클라이언트 접속 해제 시 DB에서 정보 제거 start  //
     socket.on('disconnect',()=>{
         console.log("연결종료"+socket.id);
