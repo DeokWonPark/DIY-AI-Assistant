@@ -1,0 +1,7 @@
+CREATE TABLE `CLOUDPY` (
+`number` int(30) NOT NULL,
+`title` varchar(100) NOT NULL,
+`artist` varchar(60) NOT NULL,
+`album` varchar(100) NOT NULL,
+  PRIMARY KEY (number)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

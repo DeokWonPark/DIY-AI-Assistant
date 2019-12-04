@@ -40,6 +40,9 @@ export default {
       culusers: [],  //채팅참여인원[]
       cli_name: null,
       jyp: false,
+      path:null,
+      count:0,
+     // socket: io("https://838beac0.ngrok.io") // socket connection to server
     };
   },
 
@@ -71,13 +74,85 @@ export default {
     });
 
     this.$socket.on("chat-message", data => {
-      // when "chat-message" comes from the server
+      console.log("msg received from server");
       this.messages.push(data.name+"님의 채팅: "+data.message);
       ServiceWorkerRegistration.show
 
+    this.$socket.on("chat-messagebot", data => {
+      console.log("msg received from server");
+      this.messages.push(data.message);
     });
 
 
+    this.$socket.on("song-chat",data =>{
+      var newDivHtml;
+      var wh;
+      console.log(data);
+      console.log(data.length);
+      console.log("1등")
+      if(data.length<=1){
+        newDivHtml = "<li> ---- 멜론차트 TOP 1 ---- </li>";
+        var newImgHtml = '<img src={{path}} name="sad" width="80dp" height="80dp">';
+        newDivHtml = newDivHtml+ newImgHtml+(data[0].ranking+"등. 노래:"+data[0].title+"ㅡ  "+data[0].artist)+"</br>";
+        this.chartdiv = parent.document.createElement("ul");
+        this.chartdiv.id = "songchart";
+        this.chartdiv.innerHTML = newDivHtml;
+      }
+      else if(data.length==undefined){
+        console.log(data.rows);
+        console.log(data.sql);
+        console.log("추천곡");
+        wh=data.sql;
+        newDivHtml = "<li> ---- 추천 플레이리스트 ---- </li><li> #현재 날씨에 어울리는 곡# </li>";
+        for(var c in data.rows){
+        newDivHtml = newDivHtml+(data.rows[c].title+"ㅡ  "+data.rows[c].artist)+"</br>";
+        }
+        this.chartdiv = parent.document.createElement("ul");
+        this.chartdiv.classList.add("songchartwd");
+        this.chartdiv.id="songchartwd";
+        this.chartdiv.innerHTML = newDivHtml;
+      }
+      else{
+        newDivHtml = "<li> ---- 멜론차트 TOP 50 ---- </li>";
+        for(var i in data){
+        newDivHtml = newDivHtml+ (data[i].ranking+"등. 노래:"+data[i].title+"ㅡ  "+data[i].artist)+"</br>";
+        }
+        this.chartdiv = parent.document.createElement("ul");
+        this.chartdiv.id = "songcharts";
+        this.chartdiv.innerHTML = newDivHtml;
+      }
+
+      var iBlock = document.getElementById("sky");
+      var liBlock = iBlock.getElementsByTagName("li");
+      parent.document.getElementById("sky").insertBefore(this.chartdiv,liBlock[this.messages.length+this.count]);
+      this.count=this.count+1;
+
+      if(wh=="sun"){
+        for(var s in document.getElementsByClassName("songchartwd")){
+          document.getElementsByClassName("songchartwd")[s].style.backgroundImage="url('sun.jpg')"
+        }
+      }
+      else if(wh=="cloud"){
+        for(s in document.getElementsByClassName("songchartwd")){
+          document.getElementsByClassName("songchartwd")[s].style.backgroundImage="url('cloud.jpg')"
+        }
+      }
+      else if(wh=="rain"){
+        for(s in document.getElementsByClassName("songchartwd")){
+          document.getElementsByClassName("songchartwd")[s].style.backgroundImage="url('rain.jpg')"
+        }
+      }
+      else if(wh=="snow"){
+        for(s in document.getElementsByClassName("songchartwd")){
+          document.getElementsByClassName("songchartwd")[s].style.backgroundImage="url('snow.jpg')"
+        }
+      }
+      for(var e in document.getElementsByName("sad")){
+        document.getElementsByName("sad")[e].src=data[0].imagepath;
+      }
+      //document.getElementsByName("sad")[0].src=data[0].imagepath;
+
+    });
 
     this.$socket.on("search",data =>{
       this.messages.push("@@@@   키워드 검색 결과 -start @@@@");
@@ -141,5 +216,13 @@ export default {
     color: #2c3e50;
     margin-top: 60px;
   }
+  #songchart,#songcharts{
+  color: #FFFFFF;
+  border: 5px solid navy;
+}
+#songchartwd{
+  color: #000000;
+  border: 5px solid navy;
+}
 
 </style>
