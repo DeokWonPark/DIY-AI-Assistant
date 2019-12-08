@@ -102,6 +102,7 @@ export default {
     });
   },
   
+  
   methods: {
 
     fir: function () {
@@ -140,7 +141,14 @@ export default {
       else
         return false;
     }
+  },
+  watch: {
+    messages: function() {
+        setTimeout(function(){document.getElementById("sky").scrollTop=document.getElementById("sky").scrollHeight;},100)
+    }
   }
+
+  
 };
 
 </script>
