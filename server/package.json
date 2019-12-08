@@ -8,6 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@jeremyhamm/vue-slider": "^0.2.0",
     "dialogflow": "^0.13.0",
     "express": "4.17.1",
     "firebase": "^7.5.0",
@@ -15,6 +16,7 @@
     "node-mysql": "^0.4.2",
     "socket.io": "^2.2.0",
     "vue-native-notification": "^1.0.5",
+    "vue-tiny-slider": "^0.1.39",
     "web-push": "^3.4.2"
   },
   "devDependencies": {},

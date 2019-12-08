@@ -54,7 +54,7 @@ export default {
 </script>
 <style>
 #sky{
-  background-color:rgb(0, 180, 0);
+  background-color:rgb(102, 204, 204);
   opacity:1;
 }
 </style>
