@@ -83,6 +83,7 @@ var sqlsnow = 'SELECT * FROM snowpy';
 var sqlcloud = 'SELECT * FROM cloudpy';
 var sqlhiphop='SELECT punch_line FROM hiphop WHERE number=?';
 var sqlgps=' select city2, city3 from map where X=? AND Y=?';
+var sqlnamechart='SELECT imagepath, title , artist, ranking FROM melonchart WHERE artist=?';
 
 
 app.use(express.static('dist'));  //dist 파일 접근허용
@@ -108,7 +109,6 @@ io.on('connection', (socket) => {
         
         });
         io.emit('joinroom', (culname));
-        // io.emit('dbuser',(rows));
         connection.query(sqldbname,function(err,rows,fields){ //유저 디비 정보 userlist로 보낼려고
             if(err){
                 console.log(err);
@@ -148,7 +148,6 @@ io.on('connection', (socket) => {
 
     socket.on('chat-message', (data) => {
         socket.broadcast.emit('chat-message', (data)); //나를 제외한 모든 사용자 에게만
-        //await tryDF(data.message);
         console.log(data);
         pramsmsg[0]=data.name;
         pramsmsg[1]=data.message;
@@ -185,29 +184,14 @@ io.on('connection', (socket) => {
     });      
 
     socket.on('chat-messagebot', (data) => {
-        //socket.emit('chat-messagebot', (data)); //나한테만
         tryDF(data.message);
         console.log(data);
-        // pramsmsg[0]=data.name;
-        // pramsmsg[1]=data.message;
-        // connection.query(sqlmsg,pramsmsg,function(err,rows,fields){
-        //     if(err){
-        //         console.log(err);
-        //     }
-        //     else{
-        //         console.log("메세지 정상적인 추가");
-        //     }
-        // })
     });      
 
 
     async function tryDF(data) {
         let response = await detectIntent(projectId, socket.client.id, data, "ko-KR");
         console.log("response:" + response.queryResult.fulfillmentText);
-        // console.log(response.queryResult.action);
-        // console.log(response.queryResult.parameters);
-        // console.log(response.queryResult.allRequiredParamsPresent);
-        //console.log(response.queryResult.outputContexts);
          let payload = response.queryResult.fulfillmentMessages.find(elem=>{return elem.message==='payload'});
          if (payload){
              console.log(payload.payload.fields.hint.stringValue);
@@ -243,10 +227,7 @@ io.on('connection', (socket) => {
                         url: api_url,
                         method : 'GET'
                     }, function(error, response, body){
-                        //console.log('Status', response.statusCode);
-                        //console.log('Headers', JSON.stringify(response.headers));
                         console.log('Response Received', body);
-                        //console.log('/////////////////////', body);
                         wheather=JSON.parse(body);
                         console.log(wheather.response.body.items.item);
                         for(c in wheather.response.body.items.item){
@@ -262,7 +243,7 @@ io.on('connection', (socket) => {
                                                 socket.emit('song-chat', 
                                                 {rows:rows,
                                                  sql:"sun"
-                                                }); //검색한 사용자에게만
+                                                }); 
                                                 console.log(rows);
                                             }
                                         })
@@ -277,7 +258,7 @@ io.on('connection', (socket) => {
                                                 socket.emit('song-chat', 
                                                 {   rows:rows,
                                                     sql:"rain"
-                                                   }); //검색한 사용자에게만
+                                                   }); 
                                                 console.log(rows);
                                             }
                                         })
@@ -292,7 +273,7 @@ io.on('connection', (socket) => {
                                                 socket.emit('song-chat', 
                                                 {   rows:rows,
                                                     sql:"rain"
-                                                   }); //검색한 사용자에게만
+                                                   }); 
                                                 console.log(rows);
                                             }
                                         })
@@ -307,7 +288,7 @@ io.on('connection', (socket) => {
                                                 socket.emit('song-chat', 
                                                 {   rows:rows,
                                                     sql:"snow"
-                                                   }); //검색한 사용자에게만
+                                                   }); 
                                                 console.log(rows);
                                             }
                                         })
@@ -322,7 +303,7 @@ io.on('connection', (socket) => {
                                                 socket.emit('song-chat', 
                                                 {   rows:rows,
                                                     sql:"cloud"
-                                                   }); //검색한 사용자에게만
+                                                   }); 
                                                 console.log(rows);
                                             }
                                         })
@@ -341,7 +322,7 @@ io.on('connection', (socket) => {
                                 console.log(err);
                         }
                         else{
-                            socket.emit('battle', (rows)); //검색한 사용자에게만
+                            socket.emit('battle', (rows));
                             console.log(rows);
                         }
                     })
@@ -352,15 +333,10 @@ io.on('connection', (socket) => {
              }
             
             }
-            else{
-                socket.emit("chat-messagebot", {
-                    message: "비틀즈: " + response.queryResult.fulfillmentText
-                });
-            }
     
-        // socket.emit("chat-messagebot", {
-        //   message: "비틀즈: " + response.queryResult.fulfillmentText
-        // });
+        socket.emit("chat-messagebot", {
+          message: "비틀즈: " + response.queryResult.fulfillmentText
+        });
       }
 
     socket.on('typing', (data) => {
@@ -369,12 +345,12 @@ io.on('connection', (socket) => {
     }); 
     
     socket.on('search', (data) => {
-        connection.query(sqlsearch,data.keyword,function(err,rows,fields){
+        connection.query(sqlnamechart,data.keyword,function(err,rows,fields){
             if(err){
                 console.log(err);
             }
             else{
-                socket.emit('search', (rows)); //검색한 사용자에게만
+                socket.emit('search', (rows)); 
                 console.log(rows);
             }
         })
@@ -398,11 +374,6 @@ async function detectIntent(projectId, sessionId, query, languageCode) {
       }
     };
   
-    // if (contexts && contexts.length > 0) {
-    //   request.queryParams = {
-    //     contexts: contexts,
-    //   };
-    // }
   
     const responses = await sessionClient.detectIntent(request); //dialogflow 제공함수 핵심
     return responses[0]; //response에 담긴다

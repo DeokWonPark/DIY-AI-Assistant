@@ -2,7 +2,7 @@
       <div>
         <!-- class="card bg-info" -->
         
-        <Header />
+        <Header :city="city" :jyp="jyp"/>
         <slider :width="250" format="push" direction="left" :opacity="0.15" :links="[{'id': 1, 'text': 'mellon', 'url': 'https://www.melon.com/'}, {'id': 2, 'text': 'genie', 'url': 'https://www.genie.co.kr/'}]"></slider>
         <Search @send_keyword="send_keyword($event)"/>
         <userlist :culusers="culusers" />
@@ -50,6 +50,9 @@ export default {
       path:null,
       count:0,
       city:"제주시 애월읍",
+      imgcount:0,
+      temps:0,
+      ss:true,
      // socket: io("https://838beac0.ngrok.io") // socket connection to server
     };
   },
@@ -81,11 +84,11 @@ export default {
       this.culusers=rows;
     });
 
-    this.$socket.on("chat-message", data => {
-      console.log("msg received from server");
-      this.messages.push(data.name+"님의 채팅: "+data.message);
-      ServiceWorkerRegistration.show
-    });
+    // this.$socket.on("chat-message", data => {
+    //   console.log("msg received from server");
+    //   this.messages.push(data.name+"님의 채팅: "+data.message);
+    //   ServiceWorkerRegistration.show
+    // });
 
     this.$socket.on("battle",data =>{
       console.log(data[0].punch_line);
@@ -174,11 +177,32 @@ export default {
 
     });
     this.$socket.on("search",data =>{
-      this.messages.push("@@@@   키워드 검색 결과 -start @@@@");
+      var newDivHtml;
       for(var c in data){
-        this.messages.push(data[c].msg+"ㅡ  "+data[c].name+"님이 했던 대화");
+        newDivHtml = "<li> ---- 검색 결과 ---- </li>";
+        var newImgHtml = '<img src={{path}} name="search" width="80dp" height="80dp">';
+        newDivHtml = newDivHtml+ (newImgHtml+(data[c].ranking+"등. 곡:"+data[c].title+"ㅡ  "+data[c].artist))+"</br>";
+        this.chartdiv = parent.document.createElement("ul");
+        this.chartdiv.id = "songchart";
+        this.chartdiv.innerHTML = newDivHtml;
+        var iBlock = document.getElementById("sky");
+        var liBlock = iBlock.getElementsByTagName("li");
+        parent.document.getElementById("sky").insertBefore(this.chartdiv,liBlock[this.messages.length+this.count]);
+        this.count=this.count+1;
       }
-      this.messages.push("@@@@   키워드 검색 결과 -end @@@@")
+
+      if(this.temps!=0 && this.ss==true){
+        this.temps=this.temps-1;
+        this.ss=false;
+      }
+      this.imgcount=0;
+      this.imgcount=this.imgcount+this.temps;
+
+      for(var e in document.getElementsByName("search")){
+        var d=eval(e);
+        document.getElementsByName("search")[d+this.imgcount].src=data[d].imagepath;
+        this.temps=this.temps+1;
+      }
     });
   },
 

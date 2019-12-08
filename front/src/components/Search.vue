@@ -3,7 +3,7 @@
 
     <div  class="searchcss">  
       <form @submit.prevent="$emit('send_keyword',keyword)" >
-      
+        <marquee  id ="move" width="1340" height=15 direction="right">* Merry ChristMas ~~ *</marquee>   
         <input
         type="text"
         placeholder="검색어 입력"
@@ -22,15 +22,18 @@ export default {
       keyword: "",
     };
   },
-//   name: "typ",
-//   props: ["cli_name"],
   
 
 };
 </script>
 
 <style scoped>
-.searchcss {background: rgb(102,204,204);}
+#move{
+  color: red;
+  font-size: 13px;
+  background-color: rgb(99, 192, 192);
+}
+.searchcss {background: rgb(99, 192, 192);}
 .searchcss:after {content:""; clear:both; display:table}
 .searchcss form {
   width: auto;
@@ -40,12 +43,14 @@ export default {
 .searchcss input {
   width: 150px;
   height: 42px;
-  padding-left: 15px;
+  padding-left: 10px;
+  right: 5px;
+  top: 93px;
   border-radius: 42px;
-  border: 2px solid #eeff55;
+  border: 2px solid #120d5c;
   background: rgb(255, 255, 255);
   outline: none;
-  position: relative;
+  position: absolute;
   transition: .3s linear;
 }
 .searchcss input:focus {
@@ -57,8 +62,8 @@ export default {
   background: none;
   border: none;
   position: absolute;
-  top: 83px;
-  right: 13px;
+  top: 94px;
+  right: 0px;
 }
 .searchcss button:before{
   content: "\f002";
@@ -70,7 +75,7 @@ export default {
   height: 42px;
   background: none;
   border: none;
-  position: fixed;
+  position: absolute;
   z-index: 1;
   top: 57px;
   left: 0px;
