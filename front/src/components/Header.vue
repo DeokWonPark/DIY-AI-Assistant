@@ -12,15 +12,16 @@
       </span>
     </modal>
   </div>
+
+
+
 </template>
 
 <script>
 import Modal from './Modal.vue';
-import Search from "./Search.vue";
 export default {
     components:{
-        Modal,
-        Search
+        Modal
     },
     data: function(){
         return{
@@ -51,7 +52,15 @@ export default {
 
 <style scoped>
 #star{
-  background-color: rgb(123,63,0);
+  width: 100%;
+  text-align: center;
+  background-color: rgb(102,204,204);
+  opacity:0.9;
+}
+#star2{
+  width: 5%;
+  text-align: center;
+  background-color: rgb(102,204,204);
   opacity:0.9;
 }
 #map{
@@ -61,8 +70,8 @@ export default {
   display: block;
 }
 h3 {
-  text-align: left;
-  color:rgb(255, 255, 255);
+  color:rgb(0, 0, 0);
+
 }
 #mbt{
   display: block;
@@ -78,4 +87,5 @@ h3 {
 {
   display: inline;
 }
+
 </style>

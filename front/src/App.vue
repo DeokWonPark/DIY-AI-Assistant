@@ -1,10 +1,12 @@
 <template>
       <div>
-        <!-- <button type="button" @click="notify">Show notification</button> -->
         <!-- class="card bg-info" -->
-        <Header :city="city"/>
+        
+        <Header />
+        <slider :width="250" format="push" direction="left" :opacity="0.15" :links="[{'id': 1, 'text': 'mellon', 'url': 'https://www.melon.com/'}, {'id': 2, 'text': 'genie', 'url': 'https://www.genie.co.kr/'}]"></slider>
+        <Search @send_keyword="send_keyword($event)"/>
         <userlist :culusers="culusers" />
-        <ChatList :messages="messages" :jyp="jyp" :cli_name="cli_name"/>
+        <ChatList :messages="messages" :jyp="jyp" :cli_name="cli_name" />
         <!-- <ChatList :culusers="culusers" /> -->
         
         <Input @send="send($event)" :cli_name="cli_name"/>
@@ -16,20 +18,25 @@
 
 
 <script>
+import Slider from '@jeremyhamm/vue-slider'
 import ChatList from "./components/ChatList.vue";
 import Header from "./components/Header.vue";
 import Input from "./components/Input.vue";
 import userlist from "./components/userlist.vue"; //채팅인원 보여주는 리스트 .vue
-//import Vue from 'vue'
-//import VueNativeNotification from 'vue-native-notification'
+import Vue from 'vue'
+import VueNativeNotification from 'vue-native-notification'
+import Search from "./components/Search.vue";
+Vue.use(Slider)
 export default {
   
   name: "app",
   components: {
     ChatList,
     Header,
+    Search,
     Input,
-    userlist
+    userlist,
+    'slider': Slider
   },
   data: function() {
     // data
@@ -48,13 +55,13 @@ export default {
   },
 
   created() {
-  //   Vue.use(VueNativeNotification, {
-  //   // Automatic permission request before
-  //   // showing notification (default: true)
-  //   requestOnNotify: true
-  //   });
-  //   this.$notification.requestPermission()
-  // .then(console.log)
+    Vue.use(VueNativeNotification, {
+    // Automatic permission request before 
+    // showing notification (default: true)
+    requestOnNotify: true 
+    });
+    this.$notification.requestPermission()
+  .then(console.log)
     // created callback of vue instance
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
     this.$socket.emit("userdata",name);
@@ -176,6 +183,13 @@ export default {
   },
 
   methods: {
+    
+    send_keyword(data) {
+      // implementation of send method for vue instance
+      this.$socket.emit("search", {
+        keyword: data // emitting "chat-message" to the server
+      });
+    },
     notify () {
       // https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification#Parameters
       this.$notification.show('Hello World', {
@@ -185,7 +199,7 @@ export default {
     send(data) {
       document.getElementById("form-form").value='';
       // implementation of send method for vue instance
-      this.messages.push(this.cli_name+"님의 채팅: "+data) //내가보낸 채팅 그냥 append
+      this.messages.push(this.cli_name+":"+data) //내가보낸 채팅 그냥 append
       
         if(data=='비틀즈 on'){
         this.jyp=true;
@@ -216,6 +230,7 @@ export default {
       }
     },
   }
+
 };
 </script>
 
