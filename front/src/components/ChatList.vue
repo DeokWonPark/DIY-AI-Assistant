@@ -7,8 +7,6 @@
         <span class="bubble" v-else>{{message}}</span>
 
       </li>
-        <!-- <span class="float-left">안녕</span>         -->
-      
       
       <li class="list-group-item" id="sky2" >
         <span class="float-left" id="typing" v-if=jyp>
@@ -19,24 +17,7 @@
             <b-button v-on:click="four" id="selbut">{{select4}}</b-button>
           </b-button-group>
           
-        <!--  <table>
-            <thead></thead>
-            <tbody>
-              <tr>
-              <td>  <button v-on:click="fir" id="selbut">{{select1}}</button> </td>
-              <td></td>
-              <td>  <button v-on:click="fir" id="selbut">{{select1}}</button> </td>
-              <td></td>
-              <td>  <button v-on:click="fir" id="selbut">{{select1}}</button> </td>
-              <td></td>
-              <td>  <button v-on:click="fir" id="selbut">{{select1}}</button> </td>
-              </tr>
-            </tbody>
-          </table> -->
         </span>
-      </li>
-      <li class="list-group-item" id="sky2" >
-        <span class="float-left" id="typing" v-if=jyp> 챗봇 기능 on </span>
       </li>
       <li class="list-group-item" id="sky2" v-for="typing in typings" :key="typing.id">
         <span class="float-left" id="typing"> {{typing}} </span>
@@ -54,7 +35,7 @@ export default {
     return {
       select1:"실시간 멜론차트",
       select2:"히팝!대결",
-      select3:"생각중",
+      select3:"날씨에 맞는 추천곡",
       select4:"도움말",
       typings: [],
       bots: [],
@@ -162,8 +143,9 @@ ul {
   overflow-y: auto;
 }
 #typing{
-  background-color: rgb(0, 0, 0);
-  color: rgb(255, 251, 0);
+  background-color: rgb(99, 192, 192);
+  color: rgb(0, 0, 0);
+  text-decoration-line: underline;
 }
 .bubble 
 	{
@@ -258,19 +240,26 @@ ul {
 	
 	}
 #sky{
-  background-color:rgb(102, 204, 204);
+  background-color:rgb(99, 192, 192);
   opacity:0.9;
+  border: none;
+  height: 61vh;
 }
 #sky2{
   font-weight: bold;
   background-color: rgba( 255, 255, 255, 0.0);
+  border: none;
 }
 #selbut{
-  background-color: rgb( 129, 193, 71);
+  background-color: rgb(15, 20, 82);
   padding-left: 10dp;
+  margin: 7px;
+  color:white;
+  border-radius: 10px;
+  border: rgb(43, 88, 172)
 }
 #selbut:hover{
-  background-color: rgb( 0, 128, 0);
+  background-color: rgb(0, 45, 128);
 }
 .dot{
   list-style-type:none;

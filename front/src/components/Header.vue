@@ -3,6 +3,7 @@
     <h3 id="title" @click="showModal=true">Beatles</h3>
     <h6 id="map">  제주시 애월읍</h6>
     <button id="mbt" @click="getGeo" ><img src="gps.jpg"  height="20px" width="20px"> - </button>
+    <h6 id="bot" v-if=jyp> 챗봇 기능 on</h6>
   
     <Search @send_keyword="send_keyword($event)"/>
     <modal v-if=showModal>
@@ -29,7 +30,7 @@ export default {
         }
     },
 
-    props: ["city"],
+    props: ["city","jyp"],
 
     methods: {
     send_keyword(data) {
@@ -54,13 +55,13 @@ export default {
 #star{
   width: 100%;
   /* text-align: center; */
-  background-color: rgb(102,204,204);
+  background-color: rgb(99, 192, 192);
   opacity:0.9;
 }
 #star2{
   width: 5%;
   text-align: center;
-  background-color: rgb(102,204,204);
+  background-color: rgb(99, 192, 192);
   opacity:0.9;
 }
 #map{
@@ -71,6 +72,13 @@ export default {
 #title{
   text-align: center;
   display: block;
+}
+#bot{
+  margin-left: 1025px;
+  text-align: right;
+  display: inline;
+  font-weight: 1000;
+  text-decoration-line: underline;
 }
 h3 {
   color:rgb(0, 0, 0);
