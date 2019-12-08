@@ -37,17 +37,14 @@ if(date.getDate()<10){
 }
 
 const {spawn} = require('child_process'); 
-//spawn('GPS.exe',[0 ,128.4323967 ,36.1380778])
-var X=126.327759;
+var X=126.327759;  //기본 위치 설정 제주시 애월읍
 var Y=33.456364;
 var XY;
 var fun = function() {
-    console.log("rrrr");
     spawn('GPS.exe',[0 ,X ,Y]);
     var fs = require('fs');
     fs.readFile('map.txt', 'utf8', function(err, data){
         XY=data.split(' ');
-        console.log(data);
         console.log(XY[0]);
         console.log(XY[1]); 
     });
@@ -58,9 +55,7 @@ o_data[2]="49";
 o_data[3]="37";
 
 const api_url=o_url+"serviceKey="+o_key+"&base_date="+o_data[0]+"&base_time="+o_data[1]+"&nx="+o_data[2]+"&ny="+o_data[3]+"&_type=json";
-
 var wheather="";
-
 
 
 //  데이터베이스 코드 start //
@@ -172,7 +167,7 @@ io.on('connection', (socket) => {
         Y=data.latitude;
         console.log(X);
         console.log(Y);
-        console.log("바껴라야");
+        console.log("바껴라");
         
         fun();
         setTimeout(function(){
@@ -351,15 +346,21 @@ io.on('connection', (socket) => {
                         }
                     })
                     break;
-        
+                default:
+                    break;
 
              }
             
             }
+            else{
+                socket.emit("chat-messagebot", {
+                    message: "비틀즈: " + response.queryResult.fulfillmentText
+                });
+            }
     
-        socket.emit("chat-messagebot", {
-          message: "비틀즈: " + response.queryResult.fulfillmentText
-        });
+        // socket.emit("chat-messagebot", {
+        //   message: "비틀즈: " + response.queryResult.fulfillmentText
+        // });
       }
 
     socket.on('typing', (data) => {

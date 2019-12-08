@@ -53,8 +53,8 @@ export default {
   background: none;
   border: none;
   position: absolute;
-  top: 12px;
-  right: 30px;
+  top: 83px;
+  right: 13px;
 }
 .searchcss button:before{
   content: "\f002";

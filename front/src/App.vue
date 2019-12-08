@@ -1,6 +1,6 @@
 <template>
       <div>
-        <button type="button" @click="notify">Show notification</button>
+        <!-- <button type="button" @click="notify">Show notification</button> -->
         <!-- class="card bg-info" -->
         <Header :city="city"/>
         <userlist :culusers="culusers" />
@@ -8,7 +8,7 @@
         <!-- <ChatList :culusers="culusers" /> -->
         
         <Input @send="send($event)" :cli_name="cli_name"/>
-        <button @click="getGeo">Geo!</button>
+        <!-- <button @click="getGeo">Geo!</button> -->
         <!-- props 등록 -->
       </div>
       
@@ -88,7 +88,7 @@ export default {
     this.$socket.on("map_city",data =>{
       if(data[0]==undefined){
         this.city=data.city2+" "+data.city3;
-        document.getElementById("test").innerHTML=this.city;
+        document.getElementById("map").innerHTML=this.city;
         console.log(data.city2);
         console.log(data.city3);
       }
@@ -108,7 +108,7 @@ export default {
       if(data.length<=1){
         newDivHtml = "<li> ---- 멜론차트 TOP 1 ---- </li>";
         var newImgHtml = '<img src={{path}} name="sad" width="80dp" height="80dp">';
-        newDivHtml = newDivHtml+ newImgHtml+(data[0].ranking+"등. 노래:"+data[0].title+"ㅡ  "+data[0].artist)+"</br>";
+        newDivHtml = newDivHtml+ newImgHtml+(data[0].ranking+"등. 곡:"+data[0].title+"ㅡ  "+data[0].artist)+"</br>";
         this.chartdiv = parent.document.createElement("ul");
         this.chartdiv.id = "songchart";
         this.chartdiv.innerHTML = newDivHtml;
@@ -129,7 +129,7 @@ export default {
       else{
         newDivHtml = "<li> ---- 멜론차트 TOP 50 ---- </li>";
         for(var i in data){
-        newDivHtml = newDivHtml+ (data[i].ranking+"등. 노래:"+data[i].title+"ㅡ  "+data[i].artist)+"</br>";
+        newDivHtml = newDivHtml+ (data[i].ranking+"등. 곡:"+data[i].title+"ㅡ  "+data[i].artist)+"</br>";
         }
         this.chartdiv = parent.document.createElement("ul");
         this.chartdiv.id = "songcharts";
@@ -164,7 +164,6 @@ export default {
       for(var e in document.getElementsByName("sad")){
         document.getElementsByName("sad")[e].src=data[0].imagepath;
       }
-      //document.getElementsByName("sad")[0].src=data[0].imagepath;
 
     });
     this.$socket.on("search",data =>{
@@ -216,18 +215,6 @@ export default {
       });
       }
     },
-
-    getGeo() {
-      navigator.geolocation.getCurrentPosition(location => {
-        this.messages.push( 
-          location.coords.longitude + "    " + location.coords.latitude
-        );
-        this.$socket.emit("map", {
-        longitude: location.coords.longitude, // emitting "chat-message" to the server
-        latitude: location.coords.latitude
-      });
-      });
-    }
   }
 };
 </script>

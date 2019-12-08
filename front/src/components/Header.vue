@@ -1,7 +1,9 @@
 <template>
   <div class="card-header text-white" id="star">
-    <h3 @click="showModal=true">Beatles</h3>
-    <h5 id="test">제주시 애월읍</h5>
+    <h3 id="title" @click="showModal=true">Beatles</h3>
+    <h6 id="map">  제주시 애월읍</h6>
+    <button id="mbt" @click="getGeo" ><img src="gps.jpg"  height="20px" width="20px"> - </button>
+  
     <Search @send_keyword="send_keyword($event)"/>
     <modal v-if=showModal>
       <h3 slot="header">Beatles</h3>
@@ -34,7 +36,15 @@ export default {
       this.$socket.emit("search", {
         keyword: data // emitting "chat-message" to the server
       });
-    }
+    },
+    getGeo() {
+      navigator.geolocation.getCurrentPosition(location => {
+        this.$socket.emit("map", {
+        longitude: location.coords.longitude, // emitting "chat-message" to the server
+        latitude: location.coords.latitude
+      });
+      });
+    },
   }
 }
 </script>
@@ -44,9 +54,23 @@ export default {
   background-color: rgb(123,63,0);
   opacity:0.9;
 }
+#map{
+  display: inline;
+}
+#title{
+  display: block;
+}
 h3 {
   text-align: left;
   color:rgb(255, 255, 255);
+}
+#mbt{
+  display: block;
+  float: left;
+  padding: 0;
+  border: none;
+  background: none;
+  /* background-image: url("gps.jpg") */
 }
 
 .card-header h3,
