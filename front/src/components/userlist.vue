@@ -36,9 +36,5 @@ export default {
   opacity:0.9;
   color:rgb(255, 255, 255);
 }
-button{
-    width: 100%;
-    background-color: rgb(113, 255, 132);
-}
 
 </style>

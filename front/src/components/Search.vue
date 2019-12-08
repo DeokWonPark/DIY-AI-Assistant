@@ -57,8 +57,8 @@ export default {
   background: none;
   border: none;
   position: absolute;
-  top: 57px;
-  right: 0px;
+  top: 83px;
+  right: 13px;
 }
 .searchcss button:before{
   content: "\f002";

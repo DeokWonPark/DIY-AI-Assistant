@@ -4,6 +4,7 @@ const app = express();
 
 const server = app.listen(3000,function(){
     console.log('Listening on port *: 3000');
+    console.log(Math.floor(Math.random()*8+1)); ///
 })
 
 const io = require('socket.io')(server);
@@ -34,15 +35,27 @@ var gdate;
 if(date.getDate()<10){
     gdate="0"+date.getDate();
 }
+
+const {spawn} = require('child_process'); 
+var X=126.327759;  //기본 위치 설정 제주시 애월읍
+var Y=33.456364;
+var XY;
+var fun = function() {
+    spawn('GPS.exe',[0 ,X ,Y]);
+    var fs = require('fs');
+    fs.readFile('map.txt', 'utf8', function(err, data){
+        XY=data.split(' ');
+        console.log(XY[0]);
+        console.log(XY[1]); 
+    });
+  }
 o_data[0]=date.getFullYear()+""+(date.getMonth()+1)+""+gdate;
 o_data[1]="0500";
-o_data[2]="86"
-o_data[3]="96"
+o_data[2]="49";
+o_data[3]="37";
 
 const api_url=o_url+"serviceKey="+o_key+"&base_date="+o_data[0]+"&base_time="+o_data[1]+"&nx="+o_data[2]+"&ny="+o_data[3]+"&_type=json";
-
 var wheather="";
-
 
 
 //  데이터베이스 코드 start //
@@ -50,7 +63,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : 'apmsetup',
+  password : '111111',
   database : 'user_info'
 });
 
@@ -68,6 +81,9 @@ var sqlsun = 'SELECT * FROM sunpy';
 var sqlrain = 'SELECT * FROM rainpy';
 var sqlsnow = 'SELECT * FROM snowpy';
 var sqlcloud = 'SELECT * FROM cloudpy';
+var sqlhiphop='SELECT punch_line FROM hiphop WHERE number=?';
+var sqlgps=' select city2, city3 from map where X=? AND Y=?';
+
 
 app.use(express.static('dist'));  //dist 파일 접근허용
 
@@ -146,6 +162,28 @@ io.on('connection', (socket) => {
         })
     });      
 
+    socket.on('map', (data) => {
+        X=data.longitude;
+        Y=data.latitude;
+        console.log(X);
+        console.log(Y);
+        console.log("바껴라");
+        
+        fun();
+        setTimeout(function(){
+            console.log(XY);
+            connection.query(sqlgps,XY,function(err,rows,fields){ //접속해제시 누가나갔는지 알려고 select
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    socket.emit('map_city',(rows[0]));
+                    console.log(rows[0]);
+                }
+            });
+        },1000);
+    });      
+
     socket.on('chat-messagebot', (data) => {
         //socket.emit('chat-messagebot', (data)); //나한테만
         tryDF(data.message);
@@ -200,6 +238,7 @@ io.on('connection', (socket) => {
 
                 case"추천":
                     var sql='';
+                    fun();
                     request({
                         url: api_url,
                         method : 'GET'
@@ -290,19 +329,38 @@ io.on('connection', (socket) => {
                                         break;
                                     default:
                                         break;
+                                
                                 }
                             }
                         }
                     });
                     break;
+                case "힙합":
+                    connection.query(sqlhiphop,Math.floor(Math.random()*8+1),function(err,rows,fields){
+                        if(err){
+                                console.log(err);
+                        }
+                        else{
+                            socket.emit('battle', (rows)); //검색한 사용자에게만
+                            console.log(rows);
+                        }
+                    })
+                    break;
+                default:
+                    break;
 
              }
             
             }
+            else{
+                socket.emit("chat-messagebot", {
+                    message: "비틀즈: " + response.queryResult.fulfillmentText
+                });
+            }
     
-        socket.emit("chat-messagebot", {
-          message: "비틀즈: " + response.queryResult.fulfillmentText
-        });
+        // socket.emit("chat-messagebot", {
+        //   message: "비틀즈: " + response.queryResult.fulfillmentText
+        // });
       }
 
     socket.on('typing', (data) => {

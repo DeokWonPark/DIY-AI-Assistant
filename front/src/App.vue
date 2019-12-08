@@ -10,8 +10,8 @@
         <!-- <ChatList :culusers="culusers" /> -->
         
         <Input @send="send($event)" :cli_name="cli_name"/>
+        <!-- <button @click="getGeo">Geo!</button> -->
         <!-- props 등록 -->
-
       </div>
       
 </template>
@@ -49,6 +49,7 @@ export default {
       jyp: false,
       path:null,
       count:0,
+      city:"제주시 애월읍",
      // socket: io("https://838beac0.ngrok.io") // socket connection to server
     };
   },
@@ -84,12 +85,26 @@ export default {
       console.log("msg received from server");
       this.messages.push(data.name+"님의 채팅: "+data.message);
       ServiceWorkerRegistration.show
-
-    this.$socket.on("chat-messagebot", data => {
-      console.log("msg received from server");
-      this.messages.push(data.message);
     });
 
+    this.$socket.on("battle",data =>{
+      console.log(data[0].punch_line);
+      this.messages.push(data[0].punch_line);
+    });
+
+    this.$socket.on("map_city",data =>{
+      if(data[0]==undefined){
+        this.city=data.city2+" "+data.city3;
+        document.getElementById("map").innerHTML=this.city;
+        console.log(data.city2);
+        console.log(data.city3);
+      }
+      else{
+        this.city=data[0].city2+" "+data[0].city3;
+        console.log(data[0].city2);
+        console.log(data[0].city3);
+      }
+    });
 
     this.$socket.on("song-chat",data =>{
       var newDivHtml;
@@ -100,7 +115,7 @@ export default {
       if(data.length<=1){
         newDivHtml = "<li> ---- 멜론차트 TOP 1 ---- </li>";
         var newImgHtml = '<img src={{path}} name="sad" width="80dp" height="80dp">';
-        newDivHtml = newDivHtml+ newImgHtml+(data[0].ranking+"등. 노래:"+data[0].title+"ㅡ  "+data[0].artist)+"</br>";
+        newDivHtml = newDivHtml+ newImgHtml+(data[0].ranking+"등. 곡:"+data[0].title+"ㅡ  "+data[0].artist)+"</br>";
         this.chartdiv = parent.document.createElement("ul");
         this.chartdiv.id = "songchart";
         this.chartdiv.innerHTML = newDivHtml;
@@ -108,7 +123,6 @@ export default {
       else if(data.length==undefined){
         console.log(data.rows);
         console.log(data.sql);
-        console.log("추천곡");
         wh=data.sql;
         newDivHtml = "<li> ---- 추천 플레이리스트 ---- </li><li> #현재 날씨에 어울리는 곡# </li>";
         for(var c in data.rows){
@@ -122,7 +136,7 @@ export default {
       else{
         newDivHtml = "<li> ---- 멜론차트 TOP 50 ---- </li>";
         for(var i in data){
-        newDivHtml = newDivHtml+ (data[i].ranking+"등. 노래:"+data[i].title+"ㅡ  "+data[i].artist)+"</br>";
+        newDivHtml = newDivHtml+ (data[i].ranking+"등. 곡:"+data[i].title+"ㅡ  "+data[i].artist)+"</br>";
         }
         this.chartdiv = parent.document.createElement("ul");
         this.chartdiv.id = "songcharts";
@@ -157,10 +171,8 @@ export default {
       for(var e in document.getElementsByName("sad")){
         document.getElementsByName("sad")[e].src=data[0].imagepath;
       }
-      //document.getElementsByName("sad")[0].src=data[0].imagepath;
 
     });
-
     this.$socket.on("search",data =>{
       this.messages.push("@@@@   키워드 검색 결과 -start @@@@");
       for(var c in data){
@@ -216,7 +228,7 @@ export default {
         name: this.cli_name
       });
       }
-    }
+    },
   }
 
 };
