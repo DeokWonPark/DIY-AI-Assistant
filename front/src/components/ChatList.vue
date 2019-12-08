@@ -90,8 +90,6 @@ export default {
     this.select2 = this.bots[2];
     this.select3 = this.bots[3];
     this.messages.push(this.bots[0]);
-
-
     });
   },
   

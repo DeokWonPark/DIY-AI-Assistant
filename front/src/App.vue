@@ -2,14 +2,14 @@
       <div>
         <button type="button" @click="notify">Show notification</button>
         <!-- class="card bg-info" -->
-        <Header />
+        <Header :city="city"/>
         <userlist :culusers="culusers" />
         <ChatList :messages="messages" :jyp="jyp" :cli_name="cli_name"/>
         <!-- <ChatList :culusers="culusers" /> -->
         
         <Input @send="send($event)" :cli_name="cli_name"/>
+        <button @click="getGeo">Geo!</button>
         <!-- props 등록 -->
-
       </div>
       
 </template>
@@ -20,8 +20,8 @@ import ChatList from "./components/ChatList.vue";
 import Header from "./components/Header.vue";
 import Input from "./components/Input.vue";
 import userlist from "./components/userlist.vue"; //채팅인원 보여주는 리스트 .vue
-import Vue from 'vue'
-import VueNativeNotification from 'vue-native-notification'
+//import Vue from 'vue'
+//import VueNativeNotification from 'vue-native-notification'
 export default {
   
   name: "app",
@@ -42,18 +42,19 @@ export default {
       jyp: false,
       path:null,
       count:0,
+      city:"제주시 애월읍",
      // socket: io("https://838beac0.ngrok.io") // socket connection to server
     };
   },
 
   created() {
-    Vue.use(VueNativeNotification, {
-    // Automatic permission request before
-    // showing notification (default: true)
-    requestOnNotify: true
-    });
-    this.$notification.requestPermission()
-  .then(console.log)
+  //   Vue.use(VueNativeNotification, {
+  //   // Automatic permission request before
+  //   // showing notification (default: true)
+  //   requestOnNotify: true
+  //   });
+  //   this.$notification.requestPermission()
+  // .then(console.log)
     // created callback of vue instance
     var name=prompt("채팅에 사용 할 이름을 설정해 주세요");
     this.$socket.emit("userdata",name);
@@ -77,12 +78,26 @@ export default {
       console.log("msg received from server");
       this.messages.push(data.name+"님의 채팅: "+data.message);
       ServiceWorkerRegistration.show
-
-    this.$socket.on("chat-messagebot", data => {
-      console.log("msg received from server");
-      this.messages.push(data.message);
     });
 
+    this.$socket.on("battle",data =>{
+      console.log(data[0].punch_line);
+      this.messages.push(data[0].punch_line);
+    });
+
+    this.$socket.on("map_city",data =>{
+      if(data[0]==undefined){
+        this.city=data.city2+" "+data.city3;
+        document.getElementById("test").innerHTML=this.city;
+        console.log(data.city2);
+        console.log(data.city3);
+      }
+      else{
+        this.city=data[0].city2+" "+data[0].city3;
+        console.log(data[0].city2);
+        console.log(data[0].city3);
+      }
+    });
 
     this.$socket.on("song-chat",data =>{
       var newDivHtml;
@@ -101,7 +116,6 @@ export default {
       else if(data.length==undefined){
         console.log(data.rows);
         console.log(data.sql);
-        console.log("추천곡");
         wh=data.sql;
         newDivHtml = "<li> ---- 추천 플레이리스트 ---- </li><li> #현재 날씨에 어울리는 곡# </li>";
         for(var c in data.rows){
@@ -153,7 +167,6 @@ export default {
       //document.getElementsByName("sad")[0].src=data[0].imagepath;
 
     });
-
     this.$socket.on("search",data =>{
       this.messages.push("@@@@   키워드 검색 결과 -start @@@@");
       for(var c in data){
@@ -202,6 +215,18 @@ export default {
         name: this.cli_name
       });
       }
+    },
+
+    getGeo() {
+      navigator.geolocation.getCurrentPosition(location => {
+        this.messages.push( 
+          location.coords.longitude + "    " + location.coords.latitude
+        );
+        this.$socket.emit("map", {
+        longitude: location.coords.longitude, // emitting "chat-message" to the server
+        latitude: location.coords.latitude
+      });
+      });
     }
   }
 };

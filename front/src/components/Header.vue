@@ -1,6 +1,7 @@
 <template>
   <div class="card-header text-white" id="star">
     <h3 @click="showModal=true">Beatles</h3>
+    <h5 id="test">제주시 애월읍</h5>
     <Search @send_keyword="send_keyword($event)"/>
     <modal v-if=showModal>
       <h3 slot="header">Beatles</h3>
@@ -24,6 +25,8 @@ export default {
             showModal:false
         }
     },
+
+    props: ["city"],
 
     methods: {
     send_keyword(data) {
