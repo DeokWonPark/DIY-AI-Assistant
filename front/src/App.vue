@@ -2,7 +2,7 @@
       <div>
         <!-- class="card bg-info" -->
         
-        <Header />
+        <Header :city="city"/>
         <slider :width="250" format="push" direction="left" :opacity="0.15" :links="[{'id': 1, 'text': 'mellon', 'url': 'https://www.melon.com/'}, {'id': 2, 'text': 'genie', 'url': 'https://www.genie.co.kr/'}]"></slider>
         <Search @send_keyword="send_keyword($event)"/>
         <userlist :culusers="culusers" />

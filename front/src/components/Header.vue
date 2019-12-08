@@ -1,5 +1,5 @@
 <template>
-  <div class="card-header text-white" id="star">
+  <div class="card-header text-black" id="star">
     <h3 id="title" @click="showModal=true">Beatles</h3>
     <h6 id="map">  제주시 애월읍</h6>
     <button id="mbt" @click="getGeo" ><img src="gps.jpg"  height="20px" width="20px"> - </button>
@@ -53,7 +53,7 @@ export default {
 <style scoped>
 #star{
   width: 100%;
-  text-align: center;
+  /* text-align: center; */
   background-color: rgb(102,204,204);
   opacity:0.9;
 }
@@ -65,8 +65,11 @@ export default {
 }
 #map{
   display: inline;
+  padding: 10px;
+  text-align: left;
 }
 #title{
+  text-align: center;
   display: block;
 }
 h3 {
