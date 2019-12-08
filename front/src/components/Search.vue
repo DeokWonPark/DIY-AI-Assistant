@@ -1,14 +1,18 @@
 <template>
-    <div class="searchcss">
+
+
+    <div  class="searchcss">  
       <form @submit.prevent="$emit('send_keyword',keyword)" >
+      
         <input
-        type="text" 
+        type="text"
         placeholder="검색어 입력"
         v-model="keyword"
         />
         <button type="submit"></button>
       </form>
-      </div>
+    </div>
+
 </template>
 
 <script>
@@ -26,7 +30,7 @@ export default {
 </script>
 
 <style scoped>
-.searchcss {background: #7BA7AB;}
+.searchcss {background: rgb(102,204,204);}
 .searchcss:after {content:""; clear:both; display:table}
 .searchcss form {
   width: auto;
@@ -53,11 +57,26 @@ export default {
   background: none;
   border: none;
   position: absolute;
-  top: 12px;
-  right: 30px;
+  top: 57px;
+  right: 0px;
 }
 .searchcss button:before{
   content: "\f002";
+  font-family: FontAwesome;
+  color: #324b4e;
+}
+.searchcss2{
+  width: 42px;
+  height: 42px;
+  background: none;
+  border: none;
+  position: fixed;
+  z-index: 1;
+  top: 57px;
+  left: 0px;
+}
+.searchcss2:before{
+  content: "\f009";
   font-family: FontAwesome;
   color: #324b4e;
 }

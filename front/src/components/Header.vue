@@ -1,7 +1,9 @@
 <template>
-  <div class="card-header text-white" id="star">
-    <h3 @click="showModal=true">Beatles</h3>
-    <Search @send_keyword="send_keyword($event)"/>
+
+
+  <div class="card-header text-black" id="star">
+
+    <h3>Beatles</h3>
     <modal v-if=showModal>
       <h3 slot="header">Beatles</h3>
       <span slot="footer" @click="showModal = false">
@@ -9,15 +11,16 @@
       </span>
     </modal>
   </div>
+
+
+
 </template>
 
 <script>
 import Modal from './Modal.vue';
-import Search from "./Search.vue";
 export default {
     components:{
-        Modal,
-        Search
+        Modal
     },
     data: function(){
         return{
@@ -25,25 +28,26 @@ export default {
         }
     },
 
-    methods: {
-    send_keyword(data) {
-      // implementation of send method for vue instance
-      this.$socket.emit("search", {
-        keyword: data // emitting "chat-message" to the server
-      });
-    }
-  }
+    
 }
 </script>
 
 <style scoped>
 #star{
-  background-color: rgb(123,63,0);
+  width: 100%;
+  text-align: center;
+  background-color: rgb(102,204,204);
+  opacity:0.9;
+}
+#star2{
+  width: 5%;
+  text-align: center;
+  background-color: rgb(102,204,204);
   opacity:0.9;
 }
 h3 {
-  text-align: left;
-  color:rgb(255, 255, 255);
+  color:rgb(0, 0, 0);
+
 }
 
 .card-header h3,
@@ -51,4 +55,5 @@ h3 {
 {
   display: inline;
 }
+
 </style>

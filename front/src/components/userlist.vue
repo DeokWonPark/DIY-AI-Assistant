@@ -1,6 +1,5 @@
 <template>
   <div id="listyle">
-    <marquee loop="1000" direction="right" opacity:0.1>♪ WelCome! Beatles Chatroom ♪</marquee>
     <ulist_modal v-if=showulist_modal>
       <span slot="header" @click="showulist_modal = false">
         <h3>채팅 참여 List <i class="closeModalBtn fas fa-times" aria-hidden="true"></i> </h3>
@@ -33,7 +32,7 @@ export default {
 </script>
 <style>
 #listyle{
-  background-color:rgb(0, 180, 0);
+  background-color:rgb(102, 204, 204);
   opacity:0.9;
   color:rgb(255, 255, 255);
 }
