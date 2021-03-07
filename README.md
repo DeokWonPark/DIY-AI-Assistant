@@ -1,4 +1,4 @@
-# DIY AI Assistant Chat Bot  <img src="https://www.duckon.xyz/images/chatBotlogo.PNG" width="70px" />
+# DIY AI Assistant Chat Bot  <img src="https://www.duckon.xyz/images/chatBotlogo.PNG" width="60px" />
 
 개발기간 - 2019. 09. 09 ~ 2020. 12. 08
 
